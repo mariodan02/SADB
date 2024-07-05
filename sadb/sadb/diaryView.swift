@@ -41,8 +41,6 @@ struct diaryView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 50)
             
-            // Custom tab bar
-            CustomTabBar()
         }
     }
 }
@@ -57,51 +55,6 @@ struct CalendarPicker: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIDatePicker, context: Context) {
         // Aggiorna la view
-    }
-}
-
-struct CustomTabBar: View {
-    var body: some View {
-        HStack {
-            Button(action: {
-                // Azione per il tab "Diario"
-                print("Diario tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "list.bullet")
-                    Text("Diario")
-                }
-                .padding()
-                .foregroundColor(.green)
-            }
-            Spacer()
-            Button(action: {
-                // Azione per il tab "Il mio albero"
-                print("Il mio albero tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "leaf")
-                    Text("Il mio albero")
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-            Spacer()
-            Button(action: {
-                // Azione per il tab "Progressi"
-                print("Progressi tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "sparkles")
-                    Text("Progressi")
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 10)
-        .background(Color.white.shadow(radius: 2))
     }
 }
 

@@ -1,53 +1,5 @@
 import SwiftUI
 
-struct CustomTabBarProgress: View {
-    @State private var selectedTab: Tab = .progressi
-
-    enum Tab {
-        case diario, albero, progressi
-    }
-
-    var body: some View {
-        HStack {
-            Button(action: {
-                selectedTab = .diario
-            }) {
-                VStack {
-                    Image(systemName: "list.bullet")
-                    Text("Diario")
-                }
-                .padding()
-                .foregroundColor(selectedTab == .diario ? .green : .gray)
-            }
-            Spacer()
-            Button(action: {
-                selectedTab = .albero
-            }) {
-                VStack {
-                    Image(systemName: "leaf")
-                    Text("Il mio albero")
-                }
-                .padding()
-                .foregroundColor(selectedTab == .albero ? .green : .gray)
-            }
-            Spacer()
-            Button(action: {
-                selectedTab = .progressi
-            }) {
-                VStack {
-                    Image(systemName: "sparkles")
-                    Text("Progressi")
-                }
-                .padding()
-                .foregroundColor(selectedTab == .progressi ? .green : .gray)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 10)
-        .background(Color.white.shadow(radius: 2))
-    }
-}
-
 struct progressView: View {
     var body: some View {
         VStack {
@@ -136,9 +88,6 @@ struct progressView: View {
             .padding(.horizontal, 20)
             
             Spacer()
-
-            // Aggiungi CustomTabBar qui
-            CustomTabBar()
         }
     }
 }
