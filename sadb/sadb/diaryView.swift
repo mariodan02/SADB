@@ -63,26 +63,41 @@ struct CalendarPicker: UIViewRepresentable {
 struct CustomTabBar: View {
     var body: some View {
         HStack {
-            VStack {
-                Image(systemName: "list.bullet")
-                Text("Diario")
+            Button(action: {
+                // Azione per il tab "Diario"
+                print("Diario tab clicked")
+            }) {
+                VStack {
+                    Image(systemName: "list.bullet")
+                    Text("Diario")
+                }
+                .padding()
+                .foregroundColor(.green)
             }
-            .padding()
-            .foregroundColor(.green)
             Spacer()
-            VStack {
-                Image(systemName: "leaf")
-                Text("Il mio albero")
+            Button(action: {
+                // Azione per il tab "Il mio albero"
+                print("Il mio albero tab clicked")
+            }) {
+                VStack {
+                    Image(systemName: "leaf")
+                    Text("Il mio albero")
+                }
+                .padding()
+                .foregroundColor(.gray)
             }
-            .padding()
-            .foregroundColor(.gray)
             Spacer()
-            VStack {
-                Image(systemName: "sparkles")
-                Text("Progressi")
+            Button(action: {
+                // Azione per il tab "Progressi"
+                print("Progressi tab clicked")
+            }) {
+                VStack {
+                    Image(systemName: "sparkles")
+                    Text("Progressi")
+                }
+                .padding()
+                .foregroundColor(.gray)
             }
-            .padding()
-            .foregroundColor(.gray)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 10)
