@@ -12,7 +12,7 @@ struct progressView: View {
 
     var body: some View {
             VStack {
-                // Top header
+                // Titolo
                 HStack {
                     Spacer()
                     Text("Progressi")
@@ -22,7 +22,7 @@ struct progressView: View {
                 }
                 .padding(.top, 20)
                 
-                // Savings and days without smoking
+                // Denaro risparmiato e giorni senza fumare
                 HStack {
                     VStack {
                         Text("€")
@@ -47,7 +47,7 @@ struct progressView: View {
                 .padding(.horizontal, 40)
                 .padding(.top, 20)
                 
-                // Weekly chart placeholder
+                // Grafico giornaliero
                 VStack {
                     Image(systemName: "chart.pie")
                         .resizable()
@@ -58,10 +58,10 @@ struct progressView: View {
                 }
                 .padding(.top, 20)
                 
-                // Buttons
+                // Bottoni
                 VStack(spacing: 15) {
                     Button(action: {
-                        // Action for Obbiettivi raggiunti
+                        // Action per Obbiettivi raggiunti
                     }) {
                         Text("Obbiettivi raggiunti")
                             .foregroundColor(.black)
@@ -72,7 +72,7 @@ struct progressView: View {
                     }
                     
                     Button(action: {
-                        // Action for Lista dei desideri
+                        // Action per Lista dei desideri
                     }) {
                         Text("Lista dei desideri")
                             .foregroundColor(.black)
@@ -83,7 +83,7 @@ struct progressView: View {
                     }
                     
                     Button(action: {
-                        // Action for Benefici sulla salute
+                        // Action per Benefici sulla salute
                     }) {
                         Text("Benefici sulla salute")
                             .foregroundColor(.black)
@@ -97,39 +97,10 @@ struct progressView: View {
                 .padding(.horizontal, 20)
                 
                 Spacer()
-                
-                // Bottom navigation bar
-
+               
             }
         }
     }
-
-class CustomTabBarController: UITabBarController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Initialize the view controllers
-        let diaryVC = UIViewController()
-        diaryVC.view.backgroundColor = .white
-        diaryVC.tabBarItem = UITabBarItem(title: "Diario", image: UIImage(systemName: "list.bullet"), tag: 0)
-        
-        let myTreeVC = UIViewController()
-        myTreeVC.view.backgroundColor = .white
-        myTreeVC.tabBarItem = UITabBarItem(title: "Il mio albero", image: UIImage(systemName: "leaf"), tag: 1)
-        
-        let progressVC = UIViewController()
-        progressVC.view.backgroundColor = .white
-        progressVC.tabBarItem = UITabBarItem(title: "Progressi", image: UIImage(systemName: "sparkles"), tag: 2)
-        
-        // Set the view controllers of the tab bar
-        self.viewControllers = [diaryVC, myTreeVC, progressVC]
-        
-        // Customize the tab bar appearance
-        self.tabBar.tintColor = UIColor.systemGreen
-        self.tabBar.unselectedItemTintColor = UIColor.gray
-    }
-}
 
 
     struct ContentView_Previews: PreviewProvider {

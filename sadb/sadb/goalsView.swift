@@ -9,7 +9,18 @@ import SwiftUI
 
 struct goalsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        //Titolo
+        HStack {
+            Spacer()
+            Text("Obiettivi raggiunti")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            Spacer()
+        }
+        
+        
+        
     }
 }
 
