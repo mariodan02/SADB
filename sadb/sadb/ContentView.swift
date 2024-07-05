@@ -9,23 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-TabView{
-    progressView()
-        .tabItem {
-            Label("Progressi", systemImage: "sparkles")
+        TabView{
+            progressView()
+                .tabItem {
+                    Label("Progressi", systemImage: "sparkles")
+                }
+            
+            myTreeView()
+                .tabItem {
+                    Label("Il mio albero", systemImage: "leaf")
+                }
+            
+            diaryView()
+                .tabItem {
+                    Label("Diario", systemImage: "list.bullet")
+                }
         }
-    
-    myTreeView()
-        .tabItem {
-            Label("Il mio albero", systemImage: "leaf")
-        }
-    
-    diaryView()
-        .tabItem {
-            Label("Diario", systemImage: "list.bullet")
-        }
-}
-.accentColor(.green)
+        .accentColor(.green)
     }
 }
 

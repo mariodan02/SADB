@@ -23,22 +23,13 @@ struct GoalsView: View {
 
                 List {
                     ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 1 giorno intero", achieved: true)
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 2 giorni", achieved: true)
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per una settimana", achieved: true)
-                                ProgressRow(imageName: "clock", text: "Hai risparmiato €10", achieved: true)
-                                ProgressRow(imageName: "clock", text: "Hai risparmiato €20", achieved: false)
-                                ProgressRow(imageName: "clock", text: "Hai risparmiato €50", achieved: false)
-                                
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 4 giorni", achieved: false)
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 5 giorni", achieved: false)
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 10 giorni", achieved: false)
-                                ProgressRow(imageName: "clock", text: "Non hai fumato sigarette per 2 mesi", achieved: false)
+                    ProgressRow(imageName: "clock", text: "Hai risparmiato €10", achieved: true)
+                    ProgressRow(imageName: "clock", text: "Hai risparmiato €20", achieved: false)
                 }
-                .listStyle(InsetGroupedListStyle())
+                .listStyle(PlainListStyle())
 
                 Spacer()
                 
-                CustomTabBarGoals()
             }
             .navigationTitle("")
             .navigationBarHidden(true)
@@ -60,7 +51,6 @@ struct ProgressRow: View {
         }
     }
 }
-
 
 #Preview {
     GoalsView()

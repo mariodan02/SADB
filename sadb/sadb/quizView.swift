@@ -15,50 +15,58 @@ struct quizView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-                        Text("Parlaci di te")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .padding()
+            HStack {
+                Spacer()
+                Text("Parlaci di te")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Spacer()
+            }
             
-                        VStack(alignment: .leading) {
-                            Text("Quante sigarette fumi in media al giorno?")
-                            TextField("",text: $cigarettesPerDay)
-                                .frame(width:70)
-                                .overlay(RoundedRectangle(cornerRadius: 7)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                                )
-                                .padding(.leading)
-                        }
-                        .padding(.bottom, 10)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Quanto costa un pacchetto di sigarette?")
-                            HStack{
-                                Text("€")
-                                TextField("", text: $packCost)
-                                    .frame(width: 70)
-                                    .overlay(RoundedRectangle(cornerRadius: 7)
-                                        .stroke(Color.gray, lineWidth: 1)
-                                                    )
-                            }
-                        }
-                        .padding(.bottom, 10)
+            VStack(alignment: .leading) {
+                Text("Quante sigarette fumi in media al giorno?")
+                    .padding(5)
+                TextField("",text: $cigarettesPerDay)
+                    .padding()
+                    .frame(width:70, height: 30)
+                    .overlay(RoundedRectangle(cornerRadius: 7)
+                        .stroke(Color.gray, lineWidth: 1)
+                                    )
+                    .padding(10)
+            }
             
-                        VStack(alignment: .leading) {
-                            Text("Perché vuoi smettere di fumare?")
-                            TextEditor(text: $reasonToQuit)
-                                .padding(10)
-                                .frame(height: 200)
-                                .overlay(RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1)
-                                                )
-                        }
-            NavigationStack{
+            VStack(alignment: .leading) {
+                Text("Quanto costa un pacchetto di sigarette?")
+                    .padding(5)
+                HStack{
+                    TextField("", text: $packCost)
+                        .padding()
+                        .frame(width: 70, height: 30)
+                        .overlay(RoundedRectangle(cornerRadius: 7)
+                            .stroke(Color.gray, lineWidth: 1)
+                                        )
+                        .padding(.leading, 10)
+                    Text("€")
+                }
+            }
+
+            VStack(alignment: .leading) {
+                Text("Perché vuoi smettere di fumare?")
+                    .padding(5)
+                TextEditor(text: $reasonToQuit)
+                    .padding(10)
+                    .frame(height: 200)
+                    .overlay(RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray, lineWidth: 1)
+                                    )
+                    .padding(10)
+            }
+            NavigationStack{ //??
                 Button(action: {
                     if cigarettesPerDay.isEmpty || packCost.isEmpty || reasonToQuit.isEmpty {
                                 showAlert = true
                     } else {
-                        //passa all'altra pagina
+                        
                     }
                     }) {
                             Text("Continua")
@@ -73,8 +81,8 @@ struct quizView: View {
                         }
             }
               
-            
-                        Spacer()
+        
+                    Spacer()
                     }
             .padding()
     }
