@@ -4,6 +4,7 @@ struct DiaryView: View {
     @State private var selectedDate = Date()
     @State private var diaryEntries: [String: [String]] = [:]
     @State private var showingSheet = false
+    @State private var entryToEdit: String? = nil
     
     var body: some View {
         VStack {
@@ -43,10 +44,31 @@ struct DiaryView: View {
             ScrollView {
                 if let entries = diaryEntries[formattedDate(selectedDate)], !entries.isEmpty {
                     ForEach(entries, id: \.self) { entry in
-                        Text(entry)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .border(Color.gray, width: 1)
+                        VStack(alignment: .leading) {
+                            Text(entry)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .border(Color.gray, width: 1)
+                            
+                            HStack {
+                                Button(action: {
+                                    entryToEdit = entry
+                                    showingSheet = true
+                                }) {
+                                    Text("Modifica")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.leading)
+                                
+                                Button(action: {
+                                    deleteEntry(entry)
+                                }) {
+                                    Text("Elimina")
+                                        .foregroundColor(.red)
+                                }
+                                .padding(.leading)
+                            }
+                        }
                     }
                 } else {
                     Text("Nessuna annotazione per questo giorno.")
@@ -59,6 +81,7 @@ struct DiaryView: View {
             .padding(.horizontal, 20)
             
             Button(action: {
+                entryToEdit = nil
                 showingSheet = true
             }) {
                 Text("Aggiungi una nuova annotazione")
@@ -71,11 +94,12 @@ struct DiaryView: View {
             .padding(.horizontal, 20)
             .disabled(isFutureDate(selectedDate))
             .sheet(isPresented: $showingSheet) {
-                DiaryEntryView(entry: "", saveAction: { newEntry in
-                    if diaryEntries[formattedDate(selectedDate)] == nil {
-                        diaryEntries[formattedDate(selectedDate)] = []
+                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry in
+                    if entryToEdit == nil {
+                        addEntry(newEntry)
+                    } else {
+                        updateEntry(newEntry)
                     }
-                    diaryEntries[formattedDate(selectedDate)]?.append(newEntry)
                     saveDiaryEntries()
                     showingSheet = false
                 })
@@ -118,6 +142,30 @@ struct DiaryView: View {
     
     func isFutureDate(_ date: Date) -> Bool {
         return date > Date()
+    }
+    
+    func addEntry(_ newEntry: String) {
+        let dateKey = formattedDate(selectedDate)
+        if diaryEntries[dateKey] == nil {
+            diaryEntries[dateKey] = []
+        }
+        diaryEntries[dateKey]?.append(newEntry)
+    }
+    
+    func updateEntry(_ updatedEntry: String) {
+        let dateKey = formattedDate(selectedDate)
+        guard let entries = diaryEntries[dateKey] else { return }
+        if let index = entries.firstIndex(of: entryToEdit!) {
+            diaryEntries[dateKey]?[index] = updatedEntry
+        }
+    }
+    
+    func deleteEntry(_ entry: String) {
+        let dateKey = formattedDate(selectedDate)
+        guard let entries = diaryEntries[dateKey] else { return }
+        if let index = entries.firstIndex(of: entry) {
+            diaryEntries[dateKey]?.remove(at: index)
+        }
     }
 }
 
@@ -194,7 +242,8 @@ struct CalendarView: View {
     }
     
     func hasEntry(for date: Date) -> Bool {
-        return diaryEntries[formattedDate(date)] != nil
+        let dateKey = formattedDate(date)
+        return diaryEntries[dateKey]?.isEmpty == false
     }
     
     func formattedDate(_ date: Date) -> String {
@@ -212,5 +261,3 @@ struct CalendarView: View {
 #Preview {
     DiaryView()
 }
-
-
