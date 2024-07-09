@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct diaryView: View {
+struct DiaryView: View {
     @State private var selectedDate = Date()
     @State private var diaryEntries: [String: [String]] = [:]
     @State private var showingSheet = false
@@ -210,7 +210,7 @@ struct CalendarView: View {
 }
 
 #Preview {
-    diaryView()
+    DiaryView()
 }
 
 

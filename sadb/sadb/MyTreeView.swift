@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct myTreeView: View {
+struct MyTreeView: View {
     var body: some View {
         NavigationView{
             ZStack {
@@ -27,5 +27,5 @@ struct myTreeView: View {
 }
 
 #Preview {
-    myTreeView()
+    MyTreeView()
 }

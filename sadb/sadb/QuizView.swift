@@ -1,18 +1,22 @@
-//
-//  quizView.swift
-//  sadb
-//
-//  Created by Studente on 05/07/24.
-//
-
 import SwiftUI
 
-struct quizView: View {
-    @State private var cigarettesPerDay: String = ""
-    @State private var packCost: String = ""
-    @State private var reasonToQuit: String = ""
-    @State private var showAlert: Bool = false
+struct QuizView: View {
+    @AppStorage("cigarettesPerDay") private var cigarettesPerDay: String = ""
+    @AppStorage("packCost") private var packCost: String = ""
+    @AppStorage("reasonToQuit") private var reasonToQuit: String = ""
+    @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     
+    @State private var showAlert: Bool = false
+
+    var installationDate: Date {
+        get {
+            Date(timeIntervalSince1970: installationDateTimestamp)
+        }
+        set {
+            installationDateTimestamp = newValue.timeIntervalSince1970
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
@@ -26,25 +30,25 @@ struct quizView: View {
             VStack(alignment: .leading) {
                 Text("Quante sigarette fumi in media al giorno?")
                     .padding(5)
-                TextField("",text: $cigarettesPerDay)
+                TextField("", text: $cigarettesPerDay)
                     .padding()
-                    .frame(width:70, height: 30)
+                    .frame(width: 70, height: 30)
                     .overlay(RoundedRectangle(cornerRadius: 7)
                         .stroke(Color.gray, lineWidth: 1)
-                                    )
+                    )
                     .padding(10)
             }
             
             VStack(alignment: .leading) {
                 Text("Quanto costa un pacchetto di sigarette?")
                     .padding(5)
-                HStack{
+                HStack {
                     TextField("", text: $packCost)
                         .padding()
                         .frame(width: 70, height: 30)
                         .overlay(RoundedRectangle(cornerRadius: 7)
                             .stroke(Color.gray, lineWidth: 1)
-                                        )
+                        )
                         .padding(.leading, 10)
                     Text("€")
                 }
@@ -58,37 +62,33 @@ struct quizView: View {
                     .frame(height: 200)
                     .overlay(RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 1)
-                                    )
+                    )
                     .padding(10)
             }
-            NavigationStack{ //??
-                Button(action: {
-                    if cigarettesPerDay.isEmpty || packCost.isEmpty || reasonToQuit.isEmpty {
-                                showAlert = true
-                    } else {
-                        
-                    }
-                    }) {
-                            Text("Continua")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.green)
-                                .cornerRadius(10)
-                        }
+            
+            Button(action: {
+                if cigarettesPerDay.isEmpty || packCost.isEmpty || reasonToQuit.isEmpty {
+                    showAlert = true
+                }}) {
+                Text("Continua")
+                    .foregroundColor(.white)
                     .padding()
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("Errore"), message: Text("Per favore, compila tutti i campi."), dismissButton: .default(Text("OK")))
-                        }
+                    .background(Color.green)
+                    .cornerRadius(10)
             }
-              
-        
-                    Spacer()
-                    }
-        
             .padding()
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Errore"), message: Text("Per favore, compila tutti i campi."), dismissButton: .default(Text("OK")))
+            }
+            Spacer()
+        }
+        .padding()
     }
 }
 
-#Preview {
-    quizView()
+struct quizView_Previews: PreviewProvider {
+    static var previews: some View {
+        QuizView()
+    }
 }
+

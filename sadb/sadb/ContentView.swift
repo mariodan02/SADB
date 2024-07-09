@@ -10,17 +10,17 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView{
-            progressView()
+            ProgressView()
                 .tabItem {
                     Label("Progressi", systemImage: "sparkles")
                 }
             
-            myTreeView()
+            MyTreeView()
                 .tabItem {
                     Label("Il mio albero", systemImage: "tree")
                 }
             
-            diaryView()
+            DiaryView()
                 .tabItem {
                     Label("Diario", systemImage: "list.bullet")
                 }

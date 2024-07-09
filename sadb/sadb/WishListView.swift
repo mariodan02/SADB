@@ -15,7 +15,7 @@ struct WishItem: Identifiable {
     let isActive: Bool
 }
 
-struct wishListView: View {
+struct WishListView: View {
     let wishList = [
         WishItem(name: "Occhiali da sole", cost: "80€", equivalent: "16 pacchetti di sigarette", isActive: true),
         WishItem(name: "Borsa", cost: "100€", equivalent: "20 pacchetti di sigarette", isActive: true),
@@ -51,5 +51,5 @@ struct wishListView: View {
 }
 
 #Preview {
-    wishListView()
+    WishListView()
 }
