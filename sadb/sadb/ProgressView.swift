@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct ProgressView: View {
+    
     @AppStorage("cigarettesPerDay") private var cigarettesPerDay: String = ""
     @AppStorage("packCost") private var packCost: String = ""
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
-
+    
     var installationDate: Date {
         get {
             Date(timeIntervalSince1970: installationDateTimestamp)
@@ -13,7 +14,7 @@ struct ProgressView: View {
             installationDateTimestamp = newValue.timeIntervalSince1970
         }
     }
-
+    
     var daysSinceInstallation: Int {
         let currentDate = Date()
         let days = Calendar.current.dateComponents([.day], from: installationDate, to: currentDate).day
@@ -24,8 +25,9 @@ struct ProgressView: View {
         let dailyCost = (Double(cigarettesPerDay) ?? 0) * (Double(packCost) ?? 0) / 20
         return dailyCost * Double(daysSinceInstallation)
     }
-
+    
     var body: some View {
+        NavigationView {
         VStack {
             // Denaro risparmiato e giorni senza fumare
             HStack {
@@ -65,7 +67,7 @@ struct ProgressView: View {
             
             // Bottoni
             VStack(spacing: 15) {
-                NavigationLink(destination: Text("Goals View")) {
+                NavigationLink(destination: GoalsView()) {
                     Text("Obiettivi raggiunti")
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
@@ -74,7 +76,7 @@ struct ProgressView: View {
                         .cornerRadius(10)
                 }
                 
-                NavigationLink(destination: Text("Wish List View")) {
+                NavigationLink(destination: WishListView()) {
                     Text("Lista dei desideri")
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
@@ -83,7 +85,7 @@ struct ProgressView: View {
                         .cornerRadius(10)
                 }
                 
-                NavigationLink(destination: Text("Health View")) {
+                NavigationLink(destination: HealthView()) {
                     Text("Benefici sulla salute")
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
@@ -101,6 +103,7 @@ struct ProgressView: View {
         .navigationTitle("Progressi")
         .navigationBarTitleDisplayMode(.large)
     }
+}
 }
 
 struct progressView_Previews: PreviewProvider {
