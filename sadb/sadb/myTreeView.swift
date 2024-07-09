@@ -9,7 +9,20 @@ import SwiftUI
 
 struct myTreeView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView{
+            ZStack {
+                Image("sfondo") .aspectRatio(contentMode: .fit)
+                            
+                Image("albero")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
+                    .offset(y:50)
+            }
+            .navigationTitle("Il mio albero")
+            .navigationBarTitleDisplayMode(.large)
+            .scrollContentBackground(.hidden)
+            .padding(.bottom, 200)
+        }
     }
 }
 

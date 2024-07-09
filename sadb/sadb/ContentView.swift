@@ -17,7 +17,7 @@ struct ContentView: View {
             
             myTreeView()
                 .tabItem {
-                    Label("Il mio albero", systemImage: "leaf")
+                    Label("Il mio albero", systemImage: "tree")
                 }
             
             diaryView()

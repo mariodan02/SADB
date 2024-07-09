@@ -40,11 +40,13 @@ struct wishListView: View {
                         Text("\(item.cost) = \(item.equivalent)")
                             .foregroundColor(item.isActive ? .primary : .gray)
                     }
+                    .listRowBackground(Color.green.opacity(0.2))
                     .padding(.vertical, 10)
                 }
+            .padding(.horizontal, 20)
                 .listStyle(PlainListStyle())
         }
-      
+        .background(Color.green.opacity(0.1))
     }
 }
 

@@ -84,6 +84,7 @@ struct quizView: View {
         
                     Spacer()
                     }
+        
             .padding()
     }
 }

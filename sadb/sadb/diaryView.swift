@@ -15,11 +15,9 @@ struct diaryView: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-            .padding(.top, 50)
             
             // Calendar View
             CalendarView(selectedDate: $selectedDate, diaryEntries: $diaryEntries)
-                .padding(.vertical, 20)
             
             // Display Diary Entries
             ScrollView {
@@ -28,7 +26,7 @@ struct diaryView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .border(Color.gray, width: 1)
             }
-            .frame(height: 200)
+            .frame(height: 250)
             .padding(.horizontal, 20)
             
             Button(action: {
@@ -67,14 +65,16 @@ struct diaryView: View {
             }
             .padding(.horizontal, 20)
             
-            Spacer()
             
-            // Custom tab bar
-            CustomTabBar()
         }
+        .background(Color.green.opacity(0.1))
         .onAppear {
             loadDiaryEntries()
         }
+        .tabItem {
+            Label("Diario", systemImage: "list.bullet")
+        }
+            .tag(0)
     }
     
     func formattedDate(_ date: Date) -> String {
@@ -125,10 +125,9 @@ struct DiaryEntryView: View {
                     .cornerRadius(10)
             }
             .padding(.top, 20)
-            
             Spacer()
+            
         }
-        .padding()
     }
 }
 
@@ -139,11 +138,11 @@ struct CalendarView: View {
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
     
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
+        LazyVGrid(columns: columns) {
             ForEach(0..<daysInMonth(), id: \.self) { day in
                 VStack {
                     Text("\(day + 1)")
-                        .padding()
+                        .padding(10)
                         .background(Calendar.current.isDate(selectedDate, equalTo: dateFor(day), toGranularity: .day) ? Color.blue : Color.clear)
                         .cornerRadius(5)
                         .onTapGesture {
@@ -189,50 +188,6 @@ struct CalendarView: View {
     }
 }
 
-struct CustomTabBar: View {
-    var body: some View {
-        HStack {
-            Button(action: {
-                // Azione per il tab "Diario"
-                print("Diario tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "list.bullet")
-                    Text("Diario")
-                }
-                .padding()
-                .foregroundColor(.green)
-            }
-            Spacer()
-            Button(action: {
-                // Azione per il tab "Il mio albero"
-                print("Il mio albero tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "leaf")
-                    Text("Il mio albero")
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-            Spacer()
-            Button(action: {
-                // Azione per il tab "Progressi"
-                print("Progressi tab clicked")
-            }) {
-                VStack {
-                    Image(systemName: "sparkles")
-                    Text("Progressi")
-                }
-                .padding()
-                .foregroundColor(.gray)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 10)
-        .background(Color.white.shadow(radius: 2))
-    }
-}
 
 #Preview {
     diaryView()
