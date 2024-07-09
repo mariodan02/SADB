@@ -13,7 +13,7 @@ struct MyTreeView: View {
             ZStack {
                 Image("sfondo") .aspectRatio(contentMode: .fit)
                             
-                Image("albero")
+                Image("albero_vuoto")
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .offset(y:50)

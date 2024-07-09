@@ -54,13 +54,13 @@ struct ProgressView: View {
             .padding(.horizontal, 40)
             .padding(.top, 20)
             
-            // Grafico giornaliero
+            // Grafico1
             VStack {
                 Image(systemName: "chart.pie")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
-                Text("Grafico settimanale")
+                Text("Grafico ")
                     .font(.headline)
             }
             .padding(.top, 20)

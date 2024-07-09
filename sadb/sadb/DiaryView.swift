@@ -11,7 +11,7 @@ struct DiaryView: View {
             // Top header
             HStack {
                 Spacer()
-                Text("Diario / Percorso")
+                Text("Il mio diario")
                     .font(.title)
                     .fontWeight(.bold)
                 Spacer()
