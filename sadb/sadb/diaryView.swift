@@ -2,11 +2,10 @@ import SwiftUI
 
 struct diaryView: View {
     @State private var selectedDate = Date()
-    @State private var diaryEntries: [String: String] = [:]
+    @State private var diaryEntries: [String: [String]] = [:]
     @State private var showingSheet = false
     
     var body: some View {
-        
         VStack {
             // Top header
             HStack {
@@ -17,15 +16,44 @@ struct diaryView: View {
                 Spacer()
             }
             
+            // Month Navigation
+            HStack {
+                Button(action: {
+                    selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? Date()
+                }) {
+                    Image(systemName: "chevron.left")
+                }
+                Spacer()
+                Text(monthYearString(from: selectedDate))
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+                Button(action: {
+                    selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? Date()
+                }) {
+                    Image(systemName: "chevron.right")
+                }
+            }
+            .padding(.horizontal, 20)
+            
             // Calendar View
             CalendarView(selectedDate: $selectedDate, diaryEntries: $diaryEntries)
             
             // Display Diary Entries
             ScrollView {
-                Text(diaryEntries[formattedDate(selectedDate)] ?? "Nessuna annotazione per questo giorno.")
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .border(Color.gray, width: 1)
+                if let entries = diaryEntries[formattedDate(selectedDate)], !entries.isEmpty {
+                    ForEach(entries, id: \.self) { entry in
+                        Text(entry)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .border(Color.gray, width: 1)
+                    }
+                } else {
+                    Text("Nessuna annotazione per questo giorno.")
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .border(Color.gray, width: 1)
+                }
             }
             .frame(height: 250)
             .padding(.horizontal, 20)
@@ -37,18 +65,22 @@ struct diaryView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(isFutureDate(selectedDate) ? Color.gray : Color.green)
                     .cornerRadius(10)
             }
             .padding(.horizontal, 20)
+            .disabled(isFutureDate(selectedDate))
             .sheet(isPresented: $showingSheet) {
                 DiaryEntryView(entry: "", saveAction: { newEntry in
-                    diaryEntries[formattedDate(selectedDate)] = newEntry
+                    if diaryEntries[formattedDate(selectedDate)] == nil {
+                        diaryEntries[formattedDate(selectedDate)] = []
+                    }
+                    diaryEntries[formattedDate(selectedDate)]?.append(newEntry)
                     saveDiaryEntries()
                     showingSheet = false
                 })
             }
-            
+                        
         }
         .background(Color.green.opacity(0.1))
         .onAppear {
@@ -66,20 +98,26 @@ struct diaryView: View {
         return formatter.string(from: date)
     }
     
-    func dateFromString(_ dateString: String) -> Date {
+    func monthYearString(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        return formatter.date(from: dateString) ?? Date()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: date)
     }
     
     func saveDiaryEntries() {
-        UserDefaults.standard.setValue(diaryEntries, forKey: "diaryEntries")
+        let data = try? JSONEncoder().encode(diaryEntries)
+        UserDefaults.standard.setValue(data, forKey: "diaryEntries")
     }
     
     func loadDiaryEntries() {
-        if let savedEntries = UserDefaults.standard.dictionary(forKey: "diaryEntries") as? [String: String] {
+        if let data = UserDefaults.standard.data(forKey: "diaryEntries"),
+           let savedEntries = try? JSONDecoder().decode([String: [String]].self, from: data) {
             diaryEntries = savedEntries
         }
+    }
+    
+    func isFutureDate(_ date: Date) -> Bool {
+        return date > Date()
     }
 }
 
@@ -116,7 +154,7 @@ struct DiaryEntryView: View {
 
 struct CalendarView: View {
     @Binding var selectedDate: Date
-    @Binding var diaryEntries: [String: String]
+    @Binding var diaryEntries: [String: [String]]
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
     
@@ -145,12 +183,12 @@ struct CalendarView: View {
     }
     
     func daysInMonth() -> Int {
-        let range = Calendar.current.range(of: .day, in: .month, for: Date())
+        let range = Calendar.current.range(of: .day, in: .month, for: selectedDate)
         return range?.count ?? 0
     }
     
     func dateFor(_ day: Int) -> Date {
-        var components = Calendar.current.dateComponents([.year, .month], from: Date())
+        var components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
         components.day = day + 1
         return Calendar.current.date(from: components) ?? Date()
     }
@@ -171,7 +209,7 @@ struct CalendarView: View {
     }
 }
 
-
 #Preview {
     diaryView()
 }
+
