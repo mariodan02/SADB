@@ -7,7 +7,7 @@ struct progressView: View {
                 // Denaro risparmiato e giorni senza fumare
                 HStack {
                     VStack {
-                        Text("€")
+                        Image(systemName: "eurosign")
                             .font(.largeTitle)
                         Text("120")
                             .font(.system(size: 50))
@@ -17,7 +17,7 @@ struct progressView: View {
                     }
                     Spacer()
                     VStack {
-                        Text("🕒")
+                        Image(systemName: "clock")
                             .font(.largeTitle)
                         Text("12")
                             .font(.system(size: 50))

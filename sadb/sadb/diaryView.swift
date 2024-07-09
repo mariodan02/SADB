@@ -6,6 +6,7 @@ struct diaryView: View {
     @State private var showingSheet = false
     
     var body: some View {
+        
         VStack {
             // Top header
             HStack {
@@ -47,24 +48,6 @@ struct diaryView: View {
                     showingSheet = false
                 })
             }
-            
-            // Previous Entries List
-            List {
-                ForEach(diaryEntries.keys.sorted(by: >), id: \.self) { key in
-                    HStack {
-                        Text(key)
-                            .fontWeight(.bold)
-                        Spacer()
-                        Text(diaryEntries[key] ?? "")
-                    }
-                    .padding(.vertical, 5)
-                    .onTapGesture {
-                        selectedDate = dateFromString(key)
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-            
             
         }
         .background(Color.green.opacity(0.1))
