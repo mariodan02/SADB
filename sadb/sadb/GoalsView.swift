@@ -1,57 +1,64 @@
-//
-//  goalsView.swift
-//  sadb
-//
-//  Created by Studente on 05/07/24.
-//
-
 import SwiftUI
 
 struct GoalsView: View {
+    let columns = [
+        GridItem(.flexible(), spacing: 20),
+        GridItem(.flexible(), spacing: 20)
+    ]
+    
     var body: some View {
-        NavigationStack{
             VStack {
-                List {
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 1 giorno", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 2 giorni", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 3 giorni", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 4 giorni", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 5 giorni", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 6 giorni", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 1 settimana", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 2 settimane", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 3 settimane", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 4 settimane", achieved: true)
-                    ProgressRow(imageName: "clock", text: "Non ho fumato per 1 mese", achieved: true)
-                    ProgressRow(imageName: "eurosign.circle", text: "Ho risparmiato €10", achieved: true)
-                    ProgressRow(imageName: "eurosign.circle", text: "Ho risparmiato €20", achieved: false)
-                    ProgressRow(imageName: "eurosign.circle", text: "Ho risparmiato €50", achieved: false)
-                    ProgressRow(imageName: "eurosign.circle", text: "Ho risparmiato €100", achieved: false)
-                    
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        GoalItem(imageName: "1.circle", subtitle: "Non ho fumato per 1 giorno", achieved: true)
+                                               GoalItem(imageName: "2.circle", subtitle: "Non ho fumato per 2 giorni", achieved: true)
+                                               GoalItem(imageName: "3.circle", subtitle: "Non ho fumato per 3 giorni", achieved: true)
+                                               GoalItem(imageName: "4.circle", subtitle: "Non ho fumato per 4 giorni", achieved: true)
+                                               GoalItem(imageName: "5.circle", subtitle: "Non ho fumato per 5 giorni", achieved: true)
+                                               GoalItem(imageName: "6.circle", subtitle: "Non ho fumato per 6 giorni", achieved: true)
+                                               GoalItem(imageName: "7.circle", subtitle: "Non ho fumato per 1 settimana", achieved: true)
+                                               GoalItem(imageName: "14.circle", subtitle: "Non ho fumato per 2 settimane", achieved: true)
+                                               GoalItem(imageName: "21.circle", subtitle: "Non ho fumato per 3 settimane", achieved: true)
+                                               GoalItem(imageName: "28.circle", subtitle: "Non ho fumato per 4 settimane", achieved: false)
+                                               GoalItem(imageName: "1.circle.fill", subtitle: "Non ho fumato per 1 mese", achieved: false)
+                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €10", achieved: false)
+                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €20", achieved: false)
+                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €50", achieved: false)
+                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €100", achieved: false)
+                    }
+                    .padding()
                 }
-                .listStyle(PlainListStyle())
-                .padding(.horizontal, 20)
                 Spacer()
             }
-            .navigationTitle("Obiettivi raggiunti")
+            //.navigationTitle("Obiettivi raggiunti")
+            .navigationBarTitle("Obiettivi raggiunti")
             .background(Color.green.opacity(0.1))
-        }
+        
     }
 }
 
-struct ProgressRow: View {
+struct GoalItem: View {
     var imageName: String
-    var text: String
+    var subtitle: String
     var achieved: Bool
     
     var body: some View {
-        HStack {
+        VStack {
             Image(systemName: imageName)
-                .foregroundColor(achieved ? .black : .gray)
-            Text(text)
-                .foregroundColor(achieved ? .black : .gray)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.green)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundColor(.primary)
+                .multilineTextAlignment(.center)
         }
-        .listRowBackground(Color.green.opacity(0.2))
+        .frame(width: 130, height: 130) // Ensuring all items have the same size
+        .padding(20)
+        .background(achieved ? Color.white : Color.black.opacity(0.1))
+        .cornerRadius(10)
+        .shadow(radius: 5)
     }
 }
 

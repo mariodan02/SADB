@@ -6,6 +6,7 @@ struct ProgressView: View {
     @AppStorage("packCost") private var packCost: String = ""
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     
+    
     var installationDate: Date {
         get {
             Date(timeIntervalSince1970: installationDateTimestamp)
@@ -36,24 +37,24 @@ struct ProgressView: View {
                         .font(.largeTitle)
                     Text(String(format: "%.2f", moneySaved))
                         .font(.system(size: 50))
-                        .fontWeight(.bold)
                     Text("Denaro risparmiato")
                         .font(.caption)
                 }
+                
                 Spacer()
+                
                 VStack {
                     Image(systemName: "clock")
                         .font(.largeTitle)
                     Text("\(daysSinceInstallation)")
                         .font(.system(size: 50))
-                        .fontWeight(.bold)
                     Text("Giorni senza fumare")
                         .font(.caption)
                 }
-            }
-            .padding(.horizontal, 40)
-            .padding(.top, 20)
             
+            }
+            .padding(.horizontal, 60)
+            .padding(.top, 40)
             // Grafico1
             VStack {
                 Image(systemName: "chart.pie")
@@ -70,7 +71,7 @@ struct ProgressView: View {
                 NavigationLink(destination: GoalsView()) {
                     Text("Obiettivi raggiunti")
                         .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 200)
                         .padding()
                         .background(Color.green.opacity(0.2))
                         .cornerRadius(10)
@@ -79,7 +80,7 @@ struct ProgressView: View {
                 NavigationLink(destination: WishListView()) {
                     Text("Lista dei desideri")
                         .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 200)
                         .padding()
                         .background(Color.green.opacity(0.2))
                         .cornerRadius(10)
@@ -88,15 +89,14 @@ struct ProgressView: View {
                 NavigationLink(destination: HealthView()) {
                     Text("Benefici sulla salute")
                         .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 200)
                         .padding()
                         .background(Color.green.opacity(0.2))
                         .cornerRadius(10)
                 }
             }
-            .padding(.top, 20)
-            .padding(.horizontal, 20)
-            
+            .padding([.top, .horizontal], 20)
+                        
             Spacer()
         }
         .background(Color.green.opacity(0.1))
