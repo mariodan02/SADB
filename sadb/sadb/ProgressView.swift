@@ -78,7 +78,7 @@ struct ProgressView: View {
                 }
                 
                 NavigationLink(destination: WishListView()) {
-                    Text("Lista dei desideri")
+                    Text("Wishlist")
                         .foregroundColor(.black)
                         .frame(maxWidth: 200)
                         .padding()
