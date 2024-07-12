@@ -6,13 +6,9 @@ struct DiaryView: View {
     @State private var showingSheet = false
     @State private var entryToEdit: String? = nil
     
-    // New AppStorage variable for cigarettes data
-    @AppStorage("cigarettesData") private var cigarettesDataJSON: String = "{}"
-    
-    @State private var cigarettesData: [String: String] = [:]
-    
     var body: some View {
         VStack {
+            // Top header
             HStack {
                 Spacer()
                 Text("Il mio diario")
@@ -113,12 +109,11 @@ struct DiaryView: View {
         .background(Color.green.opacity(0.1))
         .onAppear {
             loadDiaryEntries()
-            loadCigarettesData()
         }
         .tabItem {
             Label("Diario", systemImage: "list.bullet")
         }
-        .tag(0)
+            .tag(0)
     }
     
     func formattedDate(_ date: Date) -> String {
@@ -157,13 +152,10 @@ struct DiaryView: View {
         var fullEntry = newEntry
         if smoked {
             fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
-            cigarettesData[dateKey] = cigarettes
         } else {
             fullEntry += "\nHai fumato oggi: No"
-            cigarettesData[dateKey] = "0"
         }
         diaryEntries[dateKey]?.append(fullEntry)
-        saveCigarettesData()
     }
     
     func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: String) {
@@ -173,13 +165,10 @@ struct DiaryView: View {
             var fullEntry = updatedEntry
             if smoked {
                 fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
-                cigarettesData[dateKey] = cigarettes
             } else {
                 fullEntry += "\nHai fumato oggi: No"
-                cigarettesData[dateKey] = "0"
             }
             diaryEntries[dateKey]?[index] = fullEntry
-            saveCigarettesData()
         }
     }
     
@@ -188,23 +177,10 @@ struct DiaryView: View {
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entry) {
             diaryEntries[dateKey]?.remove(at: index)
-            cigarettesData[dateKey] = nil
             saveDiaryEntries()
-            saveCigarettesData()
         }
     }
-    
-    func saveCigarettesData() {
-        let data = try? JSONEncoder().encode(cigarettesData)
-        cigarettesDataJSON = String(data: data!, encoding: .utf8) ?? "{}"
-    }
-    
-    func loadCigarettesData() {
-        if let data = cigarettesDataJSON.data(using: .utf8),
-           let savedData = try? JSONDecoder().decode([String: String].self, from: data) {
-            cigarettesData = savedData
-        }
-    }
+
 }
 
 struct DiaryEntryView: View {
@@ -237,7 +213,6 @@ struct DiaryEntryView: View {
                         }
                     }
             }
-
             
             TextEditor(text: $entry)
                 .padding()
@@ -249,7 +224,7 @@ struct DiaryEntryView: View {
                 Text("Salva")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.green)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
             .padding(.top, 20)
@@ -320,4 +295,3 @@ struct CalendarView: View {
 #Preview {
     DiaryView()
 }
-
