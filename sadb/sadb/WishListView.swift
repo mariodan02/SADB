@@ -14,21 +14,17 @@ struct WishListView: View {
     @State private var isPresentingAddWishItem = false
     
     var body: some View {
-        NavigationView {
             ZStack {
                 Color.green.opacity(0.1).edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Lista dei desideri")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding()
+                    
                     
                     if wishList.isEmpty {
                         Spacer()
-                        Text("Inserisci il tuo primo desiderio")
+                        Text("Ancora non hai inserito nessun desiderio")
                             .font(.title2)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.green)
                             .multilineTextAlignment(.center)
                             .padding()
                         Spacer()
@@ -70,7 +66,8 @@ struct WishListView: View {
                     AddWishItemView(wishList: $wishList)
                 }
             }
-        }
+            .navigationBarTitle("Wishlist")
+        
     }
     
     private func deleteItems(at offsets: IndexSet) {
@@ -181,6 +178,7 @@ struct AddWishItemView: View {
                 )
             }
         }
+        .foregroundColor(.green)
     }
 }
 

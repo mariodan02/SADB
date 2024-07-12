@@ -100,7 +100,7 @@ struct ProgressView: View {
             Spacer()
         }
         .background(Color.green.opacity(0.1))
-        .navigationTitle("Progressi")
+        .navigationTitle("I miei progressi")
         .navigationBarTitleDisplayMode(.large)
     }
 }
