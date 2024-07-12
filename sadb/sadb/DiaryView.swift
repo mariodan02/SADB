@@ -249,7 +249,7 @@ struct DiaryEntryView: View {
                 Text("Salva")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.green)
                     .cornerRadius(10)
             }
             .padding(.top, 20)
