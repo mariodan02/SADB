@@ -144,7 +144,7 @@ struct DiaryView: View {
         return date > Date()
     }
     
-    func addEntry(_ newEntry: String, _ smoked: Bool, _ cigarettes: Int) {
+    func addEntry(_ newEntry: String, _ smoked: Bool, _ cigarettes: String) {
         let dateKey = formattedDate(selectedDate)
         if diaryEntries[dateKey] == nil {
             diaryEntries[dateKey] = []
@@ -158,7 +158,7 @@ struct DiaryView: View {
         diaryEntries[dateKey]?.append(fullEntry)
     }
     
-    func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: Int) {
+    func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: String) {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entryToEdit!) {
@@ -186,9 +186,9 @@ struct DiaryView: View {
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false
-    @State private var cigarettesSmoked: Int? = nil
-    var saveAction: (String, Bool, Int) -> Void
-
+    @State private var cigarettesSmoked: String = ""
+    var saveAction: (String, Bool, String) -> Void
+    
     var body: some View {
         
         Text("Scrivi la tua annotazione")
@@ -202,21 +202,24 @@ struct DiaryEntryView: View {
             .padding()
             
             if smokedToday {
-                TextField("Quante sigarette hai fumato oggi?", value: $cigarettesSmoked, formatter: NumberFormatter())
+                TextField("Quante sigarette hai fumato oggi?", text: $cigarettesSmoked)
                     .padding()
                     .border(Color.gray, width: 1)
                     .keyboardType(.numberPad)
+                    .onChange(of: cigarettesSmoked) { newValue in
+                        let filtered = newValue.filter { "0123456789".contains($0) }
+                        if filtered != newValue {
+                            cigarettesSmoked = filtered
+                        }
+                    }
             }
-            
             
             TextEditor(text: $entry)
                 .padding()
                 .border(Color.gray, width: 2)
                 .frame(height: 200)
             Button(action: {
-                if let cigarettes = cigarettesSmoked {
-                    saveAction(entry, smokedToday, cigarettes)
-                }
+                saveAction(entry, smokedToday, cigarettesSmoked)
             }) {
                 Text("Salva")
                     .foregroundColor(.white)
@@ -292,4 +295,3 @@ struct CalendarView: View {
 #Preview {
     DiaryView()
 }
-
