@@ -6,13 +6,9 @@ struct DiaryView: View {
     @State private var showingSheet = false
     @State private var entryToEdit: String? = nil
     
-    // New AppStorage variable for cigarettes data
-    @AppStorage("cigarettesData") private var cigarettesDataJSON: String = "{}"
-    
-    @State private var cigarettesData: [String: String] = [:]
-    
     var body: some View {
         VStack {
+            // Top header
             HStack {
                 Spacer()
                 Text("Il mio diario")
@@ -113,12 +109,11 @@ struct DiaryView: View {
         .background(Color.green.opacity(0.1))
         .onAppear {
             loadDiaryEntries()
-            loadCigarettesData()
         }
         .tabItem {
             Label("Diario", systemImage: "list.bullet")
         }
-        .tag(0)
+            .tag(0)
     }
     
     func formattedDate(_ date: Date) -> String {
@@ -149,7 +144,7 @@ struct DiaryView: View {
         return date > Date()
     }
     
-    func addEntry(_ newEntry: String, _ smoked: Bool, _ cigarettes: String) {
+    func addEntry(_ newEntry: String, _ smoked: Bool, _ cigarettes: Int) {
         let dateKey = formattedDate(selectedDate)
         if diaryEntries[dateKey] == nil {
             diaryEntries[dateKey] = []
@@ -157,29 +152,23 @@ struct DiaryView: View {
         var fullEntry = newEntry
         if smoked {
             fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
-            cigarettesData[dateKey] = cigarettes
         } else {
             fullEntry += "\nHai fumato oggi: No"
-            cigarettesData[dateKey] = "0"
         }
         diaryEntries[dateKey]?.append(fullEntry)
-        saveCigarettesData()
     }
     
-    func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: String) {
+    func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: Int) {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entryToEdit!) {
             var fullEntry = updatedEntry
             if smoked {
                 fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
-                cigarettesData[dateKey] = cigarettes
             } else {
                 fullEntry += "\nHai fumato oggi: No"
-                cigarettesData[dateKey] = "0"
             }
             diaryEntries[dateKey]?[index] = fullEntry
-            saveCigarettesData()
         }
     }
     
@@ -188,31 +177,18 @@ struct DiaryView: View {
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entry) {
             diaryEntries[dateKey]?.remove(at: index)
-            cigarettesData[dateKey] = nil
             saveDiaryEntries()
-            saveCigarettesData()
         }
     }
-    
-    func saveCigarettesData() {
-        let data = try? JSONEncoder().encode(cigarettesData)
-        cigarettesDataJSON = String(data: data!, encoding: .utf8) ?? "{}"
-    }
-    
-    func loadCigarettesData() {
-        if let data = cigarettesDataJSON.data(using: .utf8),
-           let savedData = try? JSONDecoder().decode([String: String].self, from: data) {
-            cigarettesData = savedData
-        }
-    }
+
 }
 
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false
-    @State private var cigarettesSmoked: String = ""
-    var saveAction: (String, Bool, String) -> Void
-    
+    @State private var cigarettesSmoked: Int? = nil
+    var saveAction: (String, Bool, Int) -> Void
+
     var body: some View {
         
         Text("Scrivi la tua annotazione")
@@ -226,30 +202,26 @@ struct DiaryEntryView: View {
             .padding()
             
             if smokedToday {
-                TextField("Quante sigarette hai fumato oggi?", text: $cigarettesSmoked)
+                TextField("Quante sigarette hai fumato oggi?", value: $cigarettesSmoked, formatter: NumberFormatter())
                     .padding()
                     .border(Color.gray, width: 1)
                     .keyboardType(.numberPad)
-                    .onChange(of: cigarettesSmoked) { newValue in
-                        let filtered = newValue.filter { "0123456789".contains($0) }
-                        if filtered != newValue {
-                            cigarettesSmoked = filtered
-                        }
-                    }
             }
-
+            
             
             TextEditor(text: $entry)
                 .padding()
                 .border(Color.gray, width: 2)
                 .frame(height: 200)
             Button(action: {
-                saveAction(entry, smokedToday, cigarettesSmoked)
+                if let cigarettes = cigarettesSmoked {
+                    saveAction(entry, smokedToday, cigarettes)
+                }
             }) {
                 Text("Salva")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.green)
+                    .background(Color.blue)
                     .cornerRadius(10)
             }
             .padding(.top, 20)
