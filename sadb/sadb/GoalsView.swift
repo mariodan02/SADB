@@ -30,7 +30,6 @@ struct GoalsView: View {
                 }
                 Spacer()
             }
-            //.navigationTitle("Obiettivi raggiunti")
             .navigationBarTitle("Obiettivi raggiunti")
             .background(Color.green.opacity(0.1))
         
