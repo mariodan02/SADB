@@ -97,7 +97,7 @@ struct DiaryView: View {
                     .background(isFutureDate(selectedDate) ? Color.gray : Color.green)
                     .cornerRadius(10)
             }
-            .padding(.horizontal, 20)
+            .padding([.horizontal, .bottom], 30)
             .disabled(isFutureDate(selectedDate))
             .sheet(isPresented: $showingSheet) {
                 DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes in
