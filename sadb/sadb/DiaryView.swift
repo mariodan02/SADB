@@ -5,6 +5,7 @@ struct DiaryView: View {
     @State private var diaryEntries: [String: [String]] = [:]
     @State private var showingSheet = false
     @State private var entryToEdit: String? = nil
+    @State private var cigarettesSmokedDiary: Int = 0
     
     var body: some View {
         VStack {
@@ -80,6 +81,11 @@ struct DiaryView: View {
             .frame(height: 250)
             .padding(.horizontal, 20)
             
+            // Total Cigarettes Smoked
+            Text("Totale sigarette fumate: \(cigarettesSmokedDiary)")
+                .font(.title2)
+                .padding(.vertical, 10)
+            
             Button(action: {
                 entryToEdit = nil
                 showingSheet = true
@@ -113,7 +119,7 @@ struct DiaryView: View {
         .tabItem {
             Label("Diario", systemImage: "list.bullet")
         }
-            .tag(0)
+        .tag(0)
     }
     
     func formattedDate(_ date: Date) -> String {
@@ -131,6 +137,7 @@ struct DiaryView: View {
     func saveDiaryEntries() {
         let data = try? JSONEncoder().encode(diaryEntries)
         UserDefaults.standard.setValue(data, forKey: "diaryEntries")
+        UserDefaults.standard.setValue(cigarettesSmokedDiary, forKey: "cigarettesSmokedDiary")
     }
     
     func loadDiaryEntries() {
@@ -138,6 +145,7 @@ struct DiaryView: View {
            let savedEntries = try? JSONDecoder().decode([String: [String]].self, from: data) {
             diaryEntries = savedEntries
         }
+        cigarettesSmokedDiary = UserDefaults.standard.integer(forKey: "cigarettesSmokedDiary")
     }
     
     func isFutureDate(_ date: Date) -> Bool {
@@ -152,6 +160,7 @@ struct DiaryView: View {
         var fullEntry = newEntry
         if smoked {
             fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
+            cigarettesSmokedDiary += Int(cigarettes) ?? 0
         } else {
             fullEntry += "\nHai fumato oggi: No"
         }
@@ -162,9 +171,15 @@ struct DiaryView: View {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entryToEdit!) {
+            // Remove the old entry's cigarette count if it had one
+            if let oldEntryCigarettes = extractCigaretteCount(from: entries[index]) {
+                cigarettesSmokedDiary -= oldEntryCigarettes
+            }
+            
             var fullEntry = updatedEntry
             if smoked {
                 fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
+                cigarettesSmokedDiary += Int(cigarettes) ?? 0
             } else {
                 fullEntry += "\nHai fumato oggi: No"
             }
@@ -176,11 +191,23 @@ struct DiaryView: View {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entry) {
+            // Subtract the cigarette count from the total before deleting
+            if let oldEntryCigarettes = extractCigaretteCount(from: entries[index]) {
+                cigarettesSmokedDiary -= oldEntryCigarettes
+            }
             diaryEntries[dateKey]?.remove(at: index)
             saveDiaryEntries()
         }
     }
-
+    
+    func extractCigaretteCount(from entry: String) -> Int? {
+        let pattern = "Quante sigarette: (\\d+)"
+        if let range = entry.range(of: pattern, options: .regularExpression),
+           let match = entry[range].split(separator: " ").last {
+            return Int(match)
+        }
+        return nil
+    }
 }
 
 struct DiaryEntryView: View {
@@ -295,3 +322,4 @@ struct CalendarView: View {
 #Preview {
     DiaryView()
 }
+
