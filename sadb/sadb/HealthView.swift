@@ -1,12 +1,11 @@
 import SwiftUI
 
 struct HealthView: View {
-    @State var organs=[Organ(name: "Cuore", image: "cuore"), Organ(name: "Polmoni", image: "polmoni"), Organ(name: "Cervello", image: "cervello"), Organ(name: "Pelle", image: "pelle")]
+    @State var organs = [Organ(name: "Cuore", image: "cuore"), Organ(name: "Polmoni", image: "polmoni"), Organ(name: "Cervello", image: "cervello"), Organ(name: "Pelle", image: "pelle")]
     
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack(alignment: .leading) {
-                
                 Text("Miglioramento della salute")
                     .font(.headline)
                 
@@ -20,24 +19,23 @@ struct HealthView: View {
                 
                 Spacer()
                 
-                List{
-                    ForEach($organs, id: \.id){ $organ in
-                        NavigationLink(destination: BenefitView(organ: $organ)){
-                            HStack{
+                List {
+                    ForEach($organs, id: \.id) { $organ in
+                        NavigationLink(destination: BenefitView(organ: $organ)) {
+                            HStack {
                                 Image(organ.image)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 80, height:80)
+                                    .frame(width: 80, height: 80)
                                     .clipped()
                                     .cornerRadius(10)
                                 Text(organ.name)
                             }
                         }
                     }
-                    
                 }
-                .listStyle(PlainListStyle()) 
-    
+                .listStyle(PlainListStyle())
+                
                 Spacer()
                 
             }
@@ -66,7 +64,6 @@ struct HealthProgressView: View {
                     .foregroundColor(Color.green)
                     .rotationEffect(Angle(degrees: 270.0))
                 
-                
                 Text("\(percentage)%")
                     .font(.headline)
                     .bold()
@@ -80,39 +77,9 @@ struct HealthProgressView: View {
     }
 }
 
-struct HealthBenefitRow: View {
-    var icon: String
-    var text: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(.red)
-            Text(text)
-                .foregroundColor(.primary)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-    }
-}
-
-struct HealthView_Previews: PreviewProvider {
-    static var previews: some View {
-        HealthView()
-    }
-}
-
-struct Organ: Identifiable, Codable{
+struct Organ: Identifiable, Codable {
     var id = UUID()
     var name: String
     var image: String
 }
-
 
