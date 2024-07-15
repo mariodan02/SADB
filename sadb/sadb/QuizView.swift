@@ -44,15 +44,16 @@ struct QuizView: View {
             VStack(alignment: .leading) {
                 Text("Quanto costa un pacchetto di sigarette?")
                     .padding(5)
-                TextField("", text: $packCost)
-                    .padding()
-                    .frame(width: 70, height: 30)
-                    .overlay(RoundedRectangle(cornerRadius: 7)
-                        .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .padding(10)
-                Text("€")
-                    .padding(.leading, 10)
+                HStack {
+                    TextField("", text: $packCost)
+                        .padding()
+                        .frame(width: 70, height: 30)
+                        .overlay(RoundedRectangle(cornerRadius: 7)
+                            .stroke(Color.gray, lineWidth: 1)
+                        )
+                        .padding(.leading, 10)
+                    Text("€")
+                }
             }
 
             VStack(alignment: .leading) {
