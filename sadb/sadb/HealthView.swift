@@ -1,7 +1,23 @@
 import SwiftUI
 
 struct HealthView: View {
-    @State var organs = [Organ(name: "Cuore", image: "cuore"), Organ(name: "Polmoni", image: "polmoni"), Organ(name: "Cervello", image: "cervello"), Organ(name: "Pelle", image: "pelle")]
+    @State var organs = [Organ(name: "Cuore", image: "cuore", articles: [
+        Article(title: "Articolo 1", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/lesperto-risponde/smettere-di-fumare-puo-cambiare-la-vita-di-un-cardiopatico#:~:text=In%20una%20recente%20revisione%20di,confronto%20a%20quelli%20che%20hanno")!),
+        Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
+        Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
+    ]), Organ(name: "Polmoni", image: "polmoni", articles: [
+        Article(title: "Articolo 1", url: URL(string: "https://www.salute.gov.it/portale/fumo/dettaglioContenutiFumo.jsp?lingua=italiano&id=5579&area=fumo&menu=vuoto#:~:text=Il%20fumo%20di%20tabacco%2C%20in,di%20cancro%2C%20cardiopatie%2C%20vasculopatie.")!),
+        Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
+        Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
+    ]), Organ(name: "Cervello", image: "cervello", articles: [
+        Article(title: "Articolo 1", url: URL(string: "https://www.salute.gov.it/portale/fumo/dettaglioContenutiFumo.jsp?lingua=italiano&id=5579&area=fumo&menu=vuoto#:~:text=Il%20fumo%20di%20tabacco%2C%20in,di%20cancro%2C%20cardiopatie%2C%20vasculopatie.")!),
+        Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
+        Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
+    ]), Organ(name: "Pelle", image: "pelle", articles: [
+        Article(title: "Articolo 1", url: URL(string: "https://www.salute.gov.it/portale/fumo/dettaglioContenutiFumo.jsp?lingua=italiano&id=5579&area=fumo&menu=vuoto#:~:text=Il%20fumo%20di%20tabacco%2C%20in,di%20cancro%2C%20cardiopatie%2C%20vasculopatie.")!),
+        Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
+        Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
+    ])]
     
     @State private var dailyCigarettes = 20
     @State private var lungPercentage = 0
@@ -92,16 +108,20 @@ struct HealthProgressView: View {
     }
 }
 
+struct Article: Identifiable, Codable {
+    var id = UUID()
+    var title: String
+    var url: URL
+}
 
 struct Organ: Identifiable, Codable {
     var id = UUID()
     var name: String
     var image: String
+    var articles: [Article]
 }
 
 
-struct HealthView_Previews: PreviewProvider {
-    static var previews: some View {
-        HealthView()
-    }
+#Preview{
+    HealthView()
 }
