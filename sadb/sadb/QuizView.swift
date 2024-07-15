@@ -1,14 +1,17 @@
 import SwiftUI
+import FirebaseCore
 
 struct QuizView: View {
     @State private var cigarettesPerDay: Double = 0
     @State private var packCost: Double = 0
     @State private var reasonToQuit: String = ""
-
+    
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
 
     @State private var showAlert: Bool = false
+
+    @StateObject private var viewModel = QuizViewModel()
 
     var installationDate: Date {
         get {
@@ -75,7 +78,7 @@ struct QuizView: View {
                     showAlert = true
                 } else {
                     hasCompletedQuiz = true
-                    saveData()
+                    viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
                 }
             }) {
                 Text("Continua")
@@ -91,25 +94,6 @@ struct QuizView: View {
             Spacer()
         }
         .padding()
-        .onAppear(perform: loadData)
-    }
-    
-    func saveData() {
-        UserDefaults.standard.set(cigarettesPerDay, forKey: "cigarettesPerDay")
-        UserDefaults.standard.set(packCost, forKey: "packCost")
-        UserDefaults.standard.set(reasonToQuit, forKey: "reasonToQuit")
-    }
-
-    func loadData() {
-        if let savedCigarettesPerDay = UserDefaults.standard.value(forKey: "cigarettesPerDay") as? Double {
-            cigarettesPerDay = savedCigarettesPerDay
-        }
-        if let savedPackCost = UserDefaults.standard.value(forKey: "packCost") as? Double {
-            packCost = savedPackCost
-        }
-        if let savedReasonToQuit = UserDefaults.standard.string(forKey: "reasonToQuit") {
-            reasonToQuit = savedReasonToQuit
-        }
     }
 }
 
