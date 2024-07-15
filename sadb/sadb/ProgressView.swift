@@ -57,7 +57,7 @@ struct ProgressView: View {
                 
                 // Bottoni
                 VStack(spacing: 15) {
-                    NavigationLink(destination: GoalsView()) {
+                    NavigationLink(destination: GoalsView(moneySaved: moneySaved, daysWithoutSmoking: daysWithoutSmoking)) {
                         Text("Obiettivi raggiunti")
                             .foregroundColor(.black)
                             .frame(maxWidth: 200)

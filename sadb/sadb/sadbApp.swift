@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseCore
 
 @main
 struct sadbApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
     
@@ -21,5 +24,12 @@ struct sadbApp: App {
             }
         }
     }
-    
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+    return true
+  }
 }
