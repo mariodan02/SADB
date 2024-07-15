@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct QuizView: View {
-    @AppStorage("cigarettesPerDay") private var cigarettesPerDay: String = ""
-    @AppStorage("packCost") private var packCost: String = ""
-    @AppStorage("reasonToQuit") private var reasonToQuit: String = ""
+    @State private var cigarettesPerDay: String = ""
+    @State private var packCost: String = ""
+    @State private var reasonToQuit: String = ""
+
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
 
@@ -58,8 +59,8 @@ struct QuizView: View {
             VStack(alignment: .leading) {
                 Text("Perché vuoi smettere di fumare?")
                     .padding(5)
-                TextEditor(text: $reasonToQuit)
-                    .padding(10)
+                TextField("", text: $reasonToQuit)
+                    .padding()
                     .frame(height: 200)
                     .overlay(RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray, lineWidth: 1)
@@ -72,6 +73,7 @@ struct QuizView: View {
                     showAlert = true
                 } else {
                     hasCompletedQuiz = true
+                    saveData()
                 }
             }) {
                 Text("Continua")
@@ -87,6 +89,25 @@ struct QuizView: View {
             Spacer()
         }
         .padding()
+        .onAppear(perform: loadData)
+    }
+    
+    func saveData() {
+        UserDefaults.standard.set(cigarettesPerDay, forKey: "cigarettesPerDay")
+        UserDefaults.standard.set(packCost, forKey: "packCost")
+        UserDefaults.standard.set(reasonToQuit, forKey: "reasonToQuit")
+    }
+
+    func loadData() {
+        if let savedCigarettesPerDay = UserDefaults.standard.string(forKey: "cigarettesPerDay") {
+            cigarettesPerDay = savedCigarettesPerDay
+        }
+        if let savedPackCost = UserDefaults.standard.string(forKey: "packCost") {
+            packCost = savedPackCost
+        }
+        if let savedReasonToQuit = UserDefaults.standard.string(forKey: "reasonToQuit") {
+            reasonToQuit = savedReasonToQuit
+        }
     }
 }
 
@@ -95,3 +116,4 @@ struct QuizView_Previews: PreviewProvider {
         QuizView()
     }
 }
+
