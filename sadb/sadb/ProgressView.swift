@@ -17,7 +17,7 @@ struct ProgressView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Denaro risparmiato e giorni senza fumare
                 HStack {
@@ -76,7 +76,7 @@ struct ProgressView: View {
                     }
                     
                     NavigationLink(destination: HealthView()) {
-                        Text("Benefici sulla salute")
+                        Text("Salute")
                             .foregroundColor(.black)
                             .frame(maxWidth: 200)
                             .padding()
