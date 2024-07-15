@@ -14,6 +14,6 @@ class QuizViewModel: ObservableObject {
             "timestamp": Date().timeIntervalSince1970
         ] as [String : Any]
         
-        ref.child("quizData").childByAutoId().setValue(quizData)
+        ref.child("username").childByAutoId().setValue(quizData)
     }
 }

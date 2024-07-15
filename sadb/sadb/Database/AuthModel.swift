@@ -12,29 +12,29 @@ class AutenticationModel: ObservableObject{
         ref.child("any Name").setValue(value)
     }
     
-    func checkNicknameExists(nickname: String, completion: @escaping (Bool) -> Void) {
-           // Crea un riferimento al nodo "nickname"
-           let nicknameRef = ref.child("nickname")
+    func checkUsernameExists(username: String, completion: @escaping (Bool) -> Void) {
+           // Crea un riferimento al nodo "username"
+           let usernameRef = ref.child("username")
            
-           // Esegue una query per cercare il nickname specifico
-           nicknameRef.queryOrdered(byChild: "name").queryEqual(toValue: nickname).observeSingleEvent(of: .value) { snapshot in
+           // Esegue una query per cercare il username specifico
+            usernameRef.queryOrdered(byChild: "name").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
                if snapshot.exists() {
-                   completion(true) // Il nickname esiste
+                   completion(true) // Il username esiste
                } else {
-                   completion(false) // Il nickname non esiste
+                   completion(false) // Il username non esiste
                }
            }
        }
     
-    func pushNewNickname(nickname: String) {
+    func pushNewUsername(username: String) {
         // Crea un nuovo riferimento sotto "nickname" con una chiave univoca
-        let newNicknameRef = ref.child("nickname").childByAutoId()
+        let newUsernameRef = ref.child("username").childByAutoId()
         
         // Imposta i valori per il nuovo oggetto
-        let nicknameData: [String: Any] = ["name": nickname]
+        let usernameData: [String: Any] = ["name": username]
         
         // Scrive i dati nel database
-        newNicknameRef.setValue(nicknameData) { error, _ in
+        newUsernameRef.setValue(usernameData) { error, _ in
             if let error = error {
                 print("Errore durante la scrittura dei dati: \(error.localizedDescription)")
             } else {
