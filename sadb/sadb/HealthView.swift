@@ -3,6 +3,11 @@ import SwiftUI
 struct HealthView: View {
     @State var organs=[Organ(name: "Cuore", image: "cuore"), Organ(name: "Polmoni", image: "polmoni"), Organ(name: "Cervello", image: "cervello"), Organ(name: "Pelle", image: "pelle")]
     
+    @State private var dailyCigarettes = 20
+    @State private var lungPercentage = 0
+    @State private var heartPercentage = 0
+    @State private var brainPercentage = 0
+
     var body: some View {
         NavigationStack{
             VStack(alignment: .leading) {
@@ -11,9 +16,9 @@ struct HealthView: View {
                     .font(.headline)
                 
                 HStack(spacing: 30) {
-                    HealthProgressView(percentage: 40, label: "Polmoni")
-                    HealthProgressView(percentage: 30, label: "Cuore")
-                    HealthProgressView(percentage: 60, label: "Cervello")
+                    HealthProgressView(percentage: lungPercentage, label: "Polmoni")
+                    HealthProgressView(percentage: heartPercentage, label: "Cuore")
+                    HealthProgressView(percentage: brainPercentage, label: "Cervello")
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -42,10 +47,20 @@ struct HealthView: View {
                 
             }
             .padding()
-            .navigationBarTitle("Benefici sulla salute")
             .background(Color(.systemGreen).opacity(0.1))
+            .onAppear {
+                            updateHealthBenefits()
+                        }
         }
+        .navigationTitle("Benefici sulla salute")
     }
+    
+    func updateHealthBenefits() {
+        //modificare il metodo
+          lungPercentage = max(0, 100 - dailyCigarettes * 2)
+          heartPercentage = max(0, 100 - dailyCigarettes * 3)
+          brainPercentage = max(0, 100 - dailyCigarettes * 4)
+      }
 }
 
 struct HealthProgressView: View {
@@ -80,27 +95,10 @@ struct HealthProgressView: View {
     }
 }
 
-struct HealthBenefitRow: View {
-    var icon: String
-    var text: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(.red)
-            Text(text)
-                .foregroundColor(.primary)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-    }
+struct Organ: Identifiable, Codable{
+    var id = UUID()
+    var name: String
+    var image: String
 }
 
 struct HealthView_Previews: PreviewProvider {
@@ -108,11 +106,3 @@ struct HealthView_Previews: PreviewProvider {
         HealthView()
     }
 }
-
-struct Organ: Identifiable, Codable{
-    var id = UUID()
-    var name: String
-    var image: String
-}
-
-
