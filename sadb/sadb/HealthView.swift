@@ -1,36 +1,50 @@
 import SwiftUI
 
 struct HealthView: View {
+    @State var organs=[Organ(name: "Cuore", image: "cuore"), Organ(name: "Polmoni", image: "polmoni"), Organ(name: "Cervello", image: "cervello"), Organ(name: "Pelle", image: "pelle")]
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            
-            Text("Miglioramento della salute")
-                .font(.headline)
-            
-            HStack(spacing: 30) {
-                HealthProgressView(percentage: 40, label: "Polmoni")
-                HealthProgressView(percentage: 30, label: "Cuore")
-                HealthProgressView(percentage: 60, label: "Cervello")
+        NavigationStack{
+            VStack(alignment: .leading) {
+                
+                Text("Miglioramento della salute")
+                    .font(.headline)
+                
+                HStack(spacing: 30) {
+                    HealthProgressView(percentage: 40, label: "Polmoni")
+                    HealthProgressView(percentage: 30, label: "Cuore")
+                    HealthProgressView(percentage: 60, label: "Cervello")
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+                
+                Spacer()
+                
+                List{
+                    ForEach($organs, id: \.id){ $organ in
+                        NavigationLink(destination: BenefitView(organ: $organ)){
+                            HStack{
+                                Image(organ.image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 80, height:80)
+                                    .clipped()
+                                    .cornerRadius(10)
+                                Text(organ.name)
+                            }
+                        }
+                    }
+                    
+                }
+                .listStyle(PlainListStyle()) 
+    
+                Spacer()
+                
             }
             .padding()
-            .frame(maxWidth: .infinity, alignment: .center)
-            
-            Spacer()
-            
-            VStack {
-                HealthBenefitRow(icon: "lungs.fill", text: "Benefici sui polmoni")
-                HealthBenefitRow(icon: "heart.fill", text: "Benefici sul cuore")
-                HealthBenefitRow(icon: "brain.head.profile", text: "Benefici sul cervello")
-                HealthBenefitRow(icon: "hand.raised.fill", text: "Benefici sulla pelle")
-            }
-            .cornerRadius(10)
-            .padding()
-            
-            Spacer()
+            .navigationBarTitle("Benefici sulla salute")
+            .background(Color(.systemGreen).opacity(0.1))
         }
-        .padding()
-        .navigationBarTitle("Benefici sulla salute")
-        .background(Color(.systemGreen).opacity(0.1))
     }
 }
 
@@ -93,6 +107,12 @@ struct HealthView_Previews: PreviewProvider {
     static var previews: some View {
         HealthView()
     }
+}
+
+struct Organ: Identifiable, Codable{
+    var id = UUID()
+    var name: String
+    var image: String
 }
 
 

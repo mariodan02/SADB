@@ -21,6 +21,7 @@
 		1FC739412C3828770049EB44 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739402C3828770049EB44 /* HealthView.swift */; };
 		1FC739432C3828850049EB44 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739422C3828850049EB44 /* GoalsView.swift */; };
 		1FC739452C3828910049EB44 /* DiaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739442C3828910049EB44 /* DiaryView.swift */; };
+		1FE89D122C45074900420385 /* BenefitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE89D112C45074900420385 /* BenefitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		1FC739402C3828770049EB44 /* HealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
 		1FC739422C3828850049EB44 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		1FC739442C3828910049EB44 /* DiaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryView.swift; sourceTree = "<group>"; };
+		1FE89D112C45074900420385 /* BenefitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				1FC739442C3828910049EB44 /* DiaryView.swift */,
 				1FC739422C3828850049EB44 /* GoalsView.swift */,
 				1FC739402C3828770049EB44 /* HealthView.swift */,
+				1FE89D112C45074900420385 /* BenefitView.swift */,
 				1FC7393E2C3828660049EB44 /* MyTreeView.swift */,
 				1FC739382C3828070049EB44 /* ProgressView.swift */,
 				1FC7393A2C38283F0049EB44 /* QuizView.swift */,
@@ -282,6 +285,7 @@
 				1F588D362C344AC300879952 /* ContentView.swift in Sources */,
 				1FC7393F2C3828660049EB44 /* MyTreeView.swift in Sources */,
 				1FC739432C3828850049EB44 /* GoalsView.swift in Sources */,
+				1FE89D122C45074900420385 /* BenefitView.swift in Sources */,
 				1FC7393B2C38283F0049EB44 /* QuizView.swift in Sources */,
 				1F588D342C344AC300879952 /* sadbApp.swift in Sources */,
 				1FC739392C3828070049EB44 /* ProgressView.swift in Sources */,
