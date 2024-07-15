@@ -1,33 +1,23 @@
 import SwiftUI
 
 struct ProgressView: View {
-    
-    @AppStorage("cigarettesPerDay") private var cigarettesPerDay: String = ""
-    @AppStorage("packCost") private var packCost: String = ""
-    @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
-    
-    var installationDate: Date {
-        get {
-            Date(timeIntervalSince1970: installationDateTimestamp)
-        }
-        set {
-            installationDateTimestamp = newValue.timeIntervalSince1970
-        }
-    }
-    
-    var daysSinceInstallation: Int {
-        let currentDate = Date()
-        let days = Calendar.current.dateComponents([.day], from: installationDate, to: currentDate).day
-        return days ?? 0
-    }
+    @State private var cigarettesPerDay: Double = 0
+    @State private var packCost: Double = 0
+    @State private var cigarettesSmokedDiary: Double = 0
+    @State private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     
     var moneySaved: Double {
-        let costPerPack = Double(packCost) ?? 0
-        return costPerPack * Double(daysSinceInstallation)
+        let cigCost = packCost / cigarettesPerDay
+        return cigCost * cigarettesPerDay - cigCost * cigarettesSmokedDiary
     }
     
+    var daysWithoutSmoking: Int {
+        let daysSinceInstallation = Date().timeIntervalSince1970 - installationDateTimestamp
+        return Int(daysSinceInstallation / 86400.0)
+    }
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Denaro risparmiato e giorni senza fumare
                 HStack {
@@ -45,7 +35,7 @@ struct ProgressView: View {
                     VStack {
                         Image(systemName: "clock")
                             .font(.largeTitle)
-                        Text("\(daysSinceInstallation)")
+                        Text("\(daysWithoutSmoking)")
                             .font(.system(size: 50))
                         Text("Giorni senza fumare")
                             .font(.caption)
@@ -86,7 +76,7 @@ struct ProgressView: View {
                     }
                     
                     NavigationLink(destination: HealthView()) {
-                        Text("Benefici sulla salute")
+                        Text("Salute")
                             .foregroundColor(.black)
                             .frame(maxWidth: 200)
                             .padding()
@@ -102,11 +92,23 @@ struct ProgressView: View {
             .navigationTitle("Progressi")
             .navigationBarTitleDisplayMode(.large)
         }
+        .onAppear(perform: loadData)
+    }
+
+    func loadData() {
+        if let savedCigarettesPerDay = UserDefaults.standard.value(forKey: "cigarettesPerDay") as? Double {
+            cigarettesPerDay = savedCigarettesPerDay
+        }
+        if let savedPackCost = UserDefaults.standard.value(forKey: "packCost") as? Double {
+            packCost = savedPackCost
+        }
+        installationDateTimestamp = UserDefaults.standard.double(forKey: "installationDate")
     }
 }
 
-struct progressView_Previews: PreviewProvider {
+struct ProgressView_Previews: PreviewProvider {
     static var previews: some View {
         ProgressView()
     }
 }
+

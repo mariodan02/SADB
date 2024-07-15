@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct QuizView: View {
-    @State private var cigarettesPerDay: String = ""
-    @State private var packCost: String = ""
+    @State private var cigarettesPerDay: Double = 0
+    @State private var packCost: Double = 0
     @State private var reasonToQuit: String = ""
 
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
@@ -32,26 +32,28 @@ struct QuizView: View {
             VStack(alignment: .leading) {
                 Text("Quante sigarette fumi in media al giorno?")
                     .padding(5)
-                TextField("", text: $cigarettesPerDay)
+                TextField("", value: $cigarettesPerDay, formatter: NumberFormatter())
                     .padding()
                     .frame(width: 70, height: 30)
                     .overlay(RoundedRectangle(cornerRadius: 7)
                         .stroke(Color.gray, lineWidth: 1)
                     )
                     .padding(10)
+                    .keyboardType(.decimalPad)
             }
             
             VStack(alignment: .leading) {
                 Text("Quanto costa un pacchetto di sigarette?")
                     .padding(5)
                 HStack {
-                    TextField("", text: $packCost)
+                    TextField("", value: $packCost, formatter: NumberFormatter())
                         .padding()
                         .frame(width: 70, height: 30)
                         .overlay(RoundedRectangle(cornerRadius: 7)
                             .stroke(Color.gray, lineWidth: 1)
                         )
                         .padding(.leading, 10)
+                        .keyboardType(.decimalPad)
                     Text("€")
                 }
             }
@@ -69,7 +71,7 @@ struct QuizView: View {
             }
             
             Button(action: {
-                if cigarettesPerDay.isEmpty || packCost.isEmpty || reasonToQuit.isEmpty {
+                if cigarettesPerDay <= 0 || packCost <= 0 || reasonToQuit.isEmpty {
                     showAlert = true
                 } else {
                     hasCompletedQuiz = true
@@ -99,10 +101,10 @@ struct QuizView: View {
     }
 
     func loadData() {
-        if let savedCigarettesPerDay = UserDefaults.standard.string(forKey: "cigarettesPerDay") {
+        if let savedCigarettesPerDay = UserDefaults.standard.value(forKey: "cigarettesPerDay") as? Double {
             cigarettesPerDay = savedCigarettesPerDay
         }
-        if let savedPackCost = UserDefaults.standard.string(forKey: "packCost") {
+        if let savedPackCost = UserDefaults.standard.value(forKey: "packCost") as? Double {
             packCost = savedPackCost
         }
         if let savedReasonToQuit = UserDefaults.standard.string(forKey: "reasonToQuit") {

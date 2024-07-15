@@ -8,35 +8,37 @@ struct BenefitView: View {
     @State private var isSheetPresented = false
     
     var body: some View {
-        VStack {
-            Image(organ.image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 250, height: 250)
-            
-            Spacer()
-            
-            ForEach(organ.articles) { article in
-                            Button(action: {
-                                selectedArticle = article
-                                isSheetPresented = true
-                            }) {
-                                LinkPreviewView(url: article.url)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 2)
-                            }
-                        }
-            
-            Spacer()
-        }
-        .navigationTitle("Benefici su \(organ.name)")
-        .sheet(isPresented: $isSheetPresented) {
-            if let article = selectedArticle {
-                ArticleView(article: article)
+        ScrollView{
+            VStack {
+                Image(organ.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250, height: 250)
+                
+                Spacer()
+                
+                ForEach(organ.articles) { article in
+                    Button(action: {
+                        selectedArticle = article
+                        isSheetPresented = true
+                    }) {
+                        LinkPreviewView(url: article.url)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 2)
+                    }
+                }
+                
+                Spacer()
+            }
+            .navigationTitle("Benefici su \(organ.name)")
+            .sheet(isPresented: $isSheetPresented) {
+                if let article = selectedArticle {
+                    ArticleView(article: article)
+                }
             }
         }
     }
@@ -93,4 +95,3 @@ struct LinkPreviewView: UIViewRepresentable {
         Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
     ])))
 }
-
