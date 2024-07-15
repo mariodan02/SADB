@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct sadbApp: App {
+    
+    @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedQuiz {
+                ContentView()
+            } else {
+                QuizView()
+            }
         }
     }
+    
 }

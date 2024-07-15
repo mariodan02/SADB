@@ -5,7 +5,8 @@ struct QuizView: View {
     @AppStorage("packCost") private var packCost: String = ""
     @AppStorage("reasonToQuit") private var reasonToQuit: String = ""
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
-    
+    @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
+
     @State private var showAlert: Bool = false
 
     var installationDate: Date {
@@ -69,7 +70,10 @@ struct QuizView: View {
             Button(action: {
                 if cigarettesPerDay.isEmpty || packCost.isEmpty || reasonToQuit.isEmpty {
                     showAlert = true
-                }}) {
+                } else {
+                    hasCompletedQuiz = true
+                }
+            }) {
                 Text("Continua")
                     .foregroundColor(.white)
                     .padding()
@@ -86,9 +90,8 @@ struct QuizView: View {
     }
 }
 
-struct quizView_Previews: PreviewProvider {
+struct QuizView_Previews: PreviewProvider {
     static var previews: some View {
         QuizView()
     }
 }
-

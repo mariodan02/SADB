@@ -14,60 +14,57 @@ struct WishListView: View {
     @State private var isPresentingAddWishItem = false
     
     var body: some View {
-            ZStack {
-                Color.green.opacity(0.1).edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    
-                    
-                    if wishList.isEmpty {
-                        Spacer()
-                        Text("Ancora non hai inserito nessun desiderio")
-                            .font(.title2)
-                            .foregroundColor(.green)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        Spacer()
-                    } else {
-                        List {
-                            ForEach(wishList) { item in
-                                HStack {
-                                    item.image
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .padding(.trailing, 10)
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text(item.name)
-                                            .font(.title2)
-                                            .fontWeight(item.isActive ? .bold : .regular)
-                                            .foregroundColor(item.isActive ? .primary : .gray)
-                                        Text("\(item.cost) = \(item.equivalent)")
-                                            .foregroundColor(item.isActive ? .primary : .gray)
-                                    }
-                                }
-                                .listRowBackground(Color.green.opacity(0.2))
-                                .padding(.vertical, 10)
-                            }
-                            .onDelete(perform: deleteItems)
-                        }
-                        .padding(.horizontal, 20)
-                        .listStyle(PlainListStyle())
-                    }
-                }
-                .navigationBarItems(trailing: Button(action: {
-                    isPresentingAddWishItem = true
-                }) {
-                    Image(systemName: "plus")
-                        .font(.title)
+        ZStack {
+            Color.green.opacity(0.1).edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                if wishList.isEmpty {
+                    Spacer()
+                    Text("Ancora non hai inserito nessun desiderio")
+                        .font(.title2)
                         .foregroundColor(.green)
-                })
-                .sheet(isPresented: $isPresentingAddWishItem) {
-                    AddWishItemView(wishList: $wishList)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                    Spacer()
+                } else {
+                    List {
+                        ForEach(wishList) { item in
+                            HStack {
+                                item.image
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .padding(.trailing, 10)
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(item.name)
+                                        .font(.title2)
+                                        .fontWeight(item.isActive ? .bold : .regular)
+                                        .foregroundColor(item.isActive ? .primary : .gray)
+                                    Text("\(item.cost) = \(item.equivalent)")
+                                        .foregroundColor(item.isActive ? .primary : .gray)
+                                }
+                            }
+                            .listRowBackground(Color.green.opacity(0.2))
+                            .padding(.vertical, 10)
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
+                    .padding(.horizontal, 20)
+                    .listStyle(PlainListStyle())
                 }
             }
-            .navigationBarTitle("Wishlist")
-        
+            .navigationBarItems(trailing: Button(action: {
+                isPresentingAddWishItem = true
+            }) {
+                Image(systemName: "plus")
+                    .font(.title)
+                    .foregroundColor(.green)
+            })
+            .sheet(isPresented: $isPresentingAddWishItem) {
+                AddWishItemView(wishList: $wishList)
+            }
+        }
+        .navigationBarTitle("Wishlist")
     }
     
     private func deleteItems(at offsets: IndexSet) {
@@ -87,8 +84,8 @@ struct AddWishItemView: View {
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var showAlert = false
     @State private var showNameAlert = false // New state for name validation alert
-    private let cigarettePackCost = 5.0
-    
+    @AppStorage("packCost") private var packCost: String = "0.0"
+
     var body: some View {
         NavigationView {
             Form {
@@ -127,8 +124,8 @@ struct AddWishItemView: View {
                         return
                     }
                     
-                    guard let costValue = Double(cost) else { return }
-                    let equivalentPacks = Int(costValue / cigarettePackCost)
+                    guard let costValue = Double(cost), let packCostValue = Double(packCost) else { return }
+                    let equivalentPacks = Int(costValue / packCostValue)
                     let equivalentText = "\(equivalentPacks) pacchetti di sigarette"
                     let newItem = WishItem(
                         name: name,
@@ -182,8 +179,6 @@ struct AddWishItemView: View {
     }
 }
 
-
-// Image picker view for selecting an image from the photo library or camera
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     var sourceType: UIImagePickerController.SourceType
@@ -224,4 +219,3 @@ struct ImagePicker: UIViewControllerRepresentable {
 #Preview {
     WishListView()
 }
-

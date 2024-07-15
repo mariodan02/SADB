@@ -15,6 +15,8 @@ struct HealthView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             
+            Spacer()
+            
             VStack {
                 HealthBenefitRow(icon: "lungs.fill", text: "Benefici sui polmoni")
                 HealthBenefitRow(icon: "heart.fill", text: "Benefici sul cuore")
@@ -92,4 +94,5 @@ struct HealthView_Previews: PreviewProvider {
         HealthView()
     }
 }
+
 
