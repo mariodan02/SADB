@@ -73,13 +73,8 @@ struct QuizView: View {
                     .padding(10)
             }
 
-            Button(action: {
-                if cigarettesPerDay <= 0 || packCost <= 0 || reasonToQuit.isEmpty {
-                    showAlert = true
-                } else {
-                    hasCompletedQuiz = true
-                    viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                }
+            Button(action: {         
+                viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
             }) {
                 Text("Continua")
                     .foregroundColor(.white)
