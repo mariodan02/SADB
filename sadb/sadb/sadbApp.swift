@@ -20,14 +20,14 @@ struct sadbApp: App {
     var body: some Scene {
         WindowGroup {
             if !hasRegistered {
-                     RegistrationView()
-             } else if !isLogged {
-                 LoginView()
-             } else if !hasCompletedQuiz {
-                 QuizView()
-             } else {
-                 ContentView()
-             }
+                RegistrationView()
+            } else if !isLogged {
+                LoginView()
+            } else if !hasCompletedQuiz {
+                QuizView()
+            } else {
+                ContentView()
+            }
         }
     }
 }

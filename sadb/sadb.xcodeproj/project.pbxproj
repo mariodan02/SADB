@@ -132,11 +132,11 @@
 			children = (
 				1F588D332C344AC300879952 /* sadbApp.swift */,
 				1F588D352C344AC300879952 /* ContentView.swift */,
-				1FE89D162C456B2A00420385 /* LoginView.swift */,
-				1FE89D182C456BCF00420385 /* RegistrationView.swift */,
 				1F588D372C344AC500879952 /* Assets.xcassets */,
 				1F588D392C344AC500879952 /* Preview Content */,
 				1FC739442C3828910049EB44 /* DiaryView.swift */,
+				1FE89D182C456BCF00420385 /* RegistrationView.swift */,
+				1FE89D162C456B2A00420385 /* LoginView.swift */,
 				1FC739422C3828850049EB44 /* GoalsView.swift */,
 				1FC739402C3828770049EB44 /* HealthView.swift */,
 				1FE89D112C45074900420385 /* BenefitView.swift */,

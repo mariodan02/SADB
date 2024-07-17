@@ -5,7 +5,7 @@ import FirebaseDatabaseSwift
 import FirebaseAuth
 
 class AutenticationModel: ObservableObject {
-    private let ref = Database.database().reference()
+    private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
     
     func pushNewValue(value: String) {
         print("Hello world")
@@ -34,7 +34,6 @@ class AutenticationModel: ObservableObject {
                 return
             }
             
-            // Store username in the database
             self.pushNewUsername(username: username) { error in
                 completion(error)
             }

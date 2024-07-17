@@ -102,21 +102,25 @@ struct RegistrationView: View {
             showingAlert = true
         } else {
             authModel.checkUsernameExists(username: username) { exists in
-                if exists {
-                    alertTitle = "Errore"
-                    alertMessage = "Username già esistente."
-                    showingAlert = true
-                } else {
-                    authModel.registerUser(email: email, password: password, username: username) { error in
-                        if let error = error {
-                            alertTitle = "Errore"
-                            alertMessage = error.localizedDescription
-                        } else {
-                            alertTitle = "Successo!"
-                            alertMessage = "Registrazione completata con successo."
-                            hasRegistered = true
-                        }
+                DispatchQueue.main.async {
+                    if exists {
+                        alertTitle = "Errore"
+                        alertMessage = "Username già esistente."
                         showingAlert = true
+                    } else {
+                        authModel.registerUser(email: email, password: password, username: username) { error in
+                            DispatchQueue.main.async {
+                                if let error = error {
+                                    alertTitle = "Errore"
+                                    alertMessage = error.localizedDescription
+                                } else {
+                                    alertTitle = "Successo!"
+                                    alertMessage = "Registrazione completata con successo."
+                                    hasRegistered = true
+                                }
+                                showingAlert = true
+                            }
+                        }
                     }
                 }
             }
@@ -129,3 +133,5 @@ struct RegistrationView_Previews: PreviewProvider {
         RegistrationView()
     }
 }
+
+
