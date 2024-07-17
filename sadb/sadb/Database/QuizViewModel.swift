@@ -5,8 +5,13 @@ import FirebaseDatabaseSwift
 
 class QuizViewModel: ObservableObject {
     private let ref = Database.database().reference()
-
+    
     func pushNewValue(cigarettesPerDay: Double, packCost: Double, reasonToQuit: String) {
+        guard let username = UserDefaults.standard.string(forKey: "username") else {
+            print("Username not found in UserDefaults")
+            return
+        }
+        
         let quizData = [
             "cigarettesPerDay": cigarettesPerDay,
             "packCost": packCost,
@@ -14,6 +19,6 @@ class QuizViewModel: ObservableObject {
             "timestamp": Date().timeIntervalSince1970
         ] as [String : Any]
         
-        ref.child("username").childByAutoId().setValue(quizData)
+        ref.child("username").child(username).childByAutoId().setValue(quizData)
     }
 }

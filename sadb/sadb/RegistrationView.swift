@@ -1,4 +1,5 @@
 import SwiftUI
+import Firebase
 
 struct RegistrationView: View {
     @State private var name: String = ""
@@ -11,6 +12,8 @@ struct RegistrationView: View {
     @State private var alertTitle = ""
     
     @AppStorage("hasRegistered") private var hasRegistered = false
+    
+    @StateObject private var authModel = AutenticationModel()
     
     var body: some View {
         NavigationView {
@@ -46,7 +49,6 @@ struct RegistrationView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
                         .padding(.bottom, 20)
-                    
                     
                     Text("Username")
                         .font(.headline)
@@ -94,22 +96,30 @@ struct RegistrationView: View {
     }
     
     func register() {
-        if username.isEmpty || password.isEmpty || name.isEmpty || lastName.isEmpty || email.isEmpty{
+        if username.isEmpty || password.isEmpty || name.isEmpty || lastName.isEmpty || email.isEmpty {
             alertTitle = "Errore"
             alertMessage = "Per favore, compila tutti i campi."
             showingAlert = true
         } else {
-            let defaults = UserDefaults.standard
-            defaults.set(name, forKey: "name")
-            defaults.set(lastName, forKey: "lastName")
-            defaults.set(email, forKey: "email")
-            defaults.set(username, forKey: "username")
-            defaults.set(password, forKey: "password")
-
-//            alertTitle = "Successo!"
-//            alertMessage = "Registrazione completata con successo."
-//            showingAlert = true
-            hasRegistered = true
+            authModel.checkUsernameExists(username: username) { exists in
+                if exists {
+                    alertTitle = "Errore"
+                    alertMessage = "Username già esistente."
+                    showingAlert = true
+                } else {
+                    authModel.registerUser(email: email, password: password, username: username) { error in
+                        if let error = error {
+                            alertTitle = "Errore"
+                            alertMessage = error.localizedDescription
+                        } else {
+                            alertTitle = "Successo!"
+                            alertMessage = "Registrazione completata con successo."
+                            hasRegistered = true
+                        }
+                        showingAlert = true
+                    }
+                }
+            }
         }
     }
 }
