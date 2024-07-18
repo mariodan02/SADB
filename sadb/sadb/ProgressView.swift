@@ -3,33 +3,28 @@ import SwiftUI
 struct ProgressView: View {
     
     @AppStorage("e_mail") private var e_mail : String = ""
-    
-    @State private var cigarettesPerDay: Double = 0
-    @State private var packCost: Double = 0
-    @State private var cigarettesSmokedDiary: Double = 0
-    @State private var installationDateTimestamp: Double = Date().timeIntervalSince1970
-    
-    var moneySaved: Double {
-        let cigCost = packCost / cigarettesPerDay
-        return cigCost * cigarettesPerDay - cigCost * cigarettesSmokedDiary
-    }
-    
-    var daysWithoutSmoking: Int {
-        let daysSinceInstallation = Date().timeIntervalSince1970 - installationDateTimestamp
-        return Int(daysSinceInstallation / 86400.0)
-    }
-    
+    @StateObject private var authModel = AuthModel()
+    @State private var username: String?
+
     var body: some View {
         
         NavigationStack {
             VStack {
-                Text("Ciao, \(e_mail)")
-                // Denaro risparmiato e giorni senza fumare
+                if let username = username {
+                    Text("Ciao, \(username)")
+                } else {
+                    Text("Utente non loggato")
+                        .onAppear {
+                            authModel.fetchUsername { fetchedUsername in
+                                self.username = fetchedUsername
+                            }
+                        }
+                }
                 HStack {
                     VStack {
                         Image(systemName: "eurosign")
                             .font(.largeTitle)
-                        Text(String(format: "%.2f", moneySaved))
+                        Text(String(format: "%.2f", 0))
                             .font(.system(size: 50))
                         Text("Denaro risparmiato")
                             .font(.caption)
@@ -40,7 +35,7 @@ struct ProgressView: View {
                     VStack {
                         Image(systemName: "clock")
                             .font(.largeTitle)
-                        Text("\(daysWithoutSmoking)")
+                        Text("0")
                             .font(.system(size: 50))
                         Text("Giorni senza fumare")
                             .font(.caption)

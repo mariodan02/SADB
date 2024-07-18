@@ -16,7 +16,7 @@ struct LoginView: View {
             VStack {
                 Spacer()
                 
-                Text("Benvenuto")
+                Text("Accedi")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom, 40)
@@ -60,7 +60,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
+                        .background(Color.green)
                         .cornerRadius(10)
                 }
                 .padding(.horizontal, 40)
@@ -69,8 +69,10 @@ struct LoginView: View {
                     Alert(title: Text("Errore"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
                 
-                NavigationLink(destination: QuizView(), isActive: $isLogged) {
-                    EmptyView()
+                NavigationLink(destination: RegistrationView()) {
+                    Text("Non hai ancora un account? Registrati")
+                        .foregroundColor(.green)
+                        .padding(.top, 10)
                 }
 
                 Spacer()

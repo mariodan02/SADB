@@ -22,7 +22,7 @@ struct RegistrationView: View {
                 VStack {
                     Spacer()
                     
-                    Text("Registrazione")
+                    Text("Registrati")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding(.bottom, 20)

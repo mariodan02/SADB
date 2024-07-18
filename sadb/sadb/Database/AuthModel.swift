@@ -5,6 +5,7 @@ import FirebaseDatabaseSwift
 import FirebaseAuth
 
 class AuthModel: ObservableObject {
+    @Published var username: String?
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
 
     func pushNewValue(username: String, email: String, password: String, completion: @escaping (Error?) -> Void) {
@@ -14,7 +15,6 @@ class AuthModel: ObservableObject {
                 completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Username already exists"]))
                 return
             }
-            
             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                 if let error = error {
                     print("Error creating user: \(error.localizedDescription)")
@@ -69,5 +69,25 @@ class AuthModel: ObservableObject {
             completion(error)
         }
     }
+    
+    func fetchUsername(completion: @escaping (String?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        let usernameRef = ref.child("usernames").child(uid).child("name")
+        usernameRef.observeSingleEvent(of: .value) { snapshot in
+            if let username = snapshot.value as? String {
+                self.username = username
+                completion(username)
+            } else {
+                completion(nil)
+            }
+        } withCancel: { error in
+            print("Error fetching username: \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
 }
+    
 
