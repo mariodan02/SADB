@@ -53,4 +53,23 @@ class QuizViewModel: ObservableObject {
             }
         }
     }
+    
+    // Nuova funzione per recuperare i dati del quiz
+    func fetchQuizData(completion: @escaping (Double?, Double?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            completion(nil, nil)
+            return
+        }
+
+        ref.child("usernames").child(user.uid).child("quizData").observeSingleEvent(of: .value) { snapshot in
+            if let quizData = snapshot.value as? [String: Any],
+               let packCost = quizData["packCost"] as? Double,
+               let cigarettesPerDay = quizData["cigarettesPerDay"] as? Double {
+                completion(packCost, cigarettesPerDay)
+            } else {
+                completion(nil, nil)
+            }
+        }
+    }
 }
