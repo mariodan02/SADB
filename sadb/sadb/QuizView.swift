@@ -5,24 +5,12 @@ struct QuizView: View {
     @State private var cigarettesPerDay: Double = 0
     @State private var packCost: Double = 0.0
     @State private var reasonToQuit: String = ""
-    
-    @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
-    @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
-    
+        
     @State private var showAlert: Bool = false
-    @State private var quizCompleted: Bool = false // New state for tracking quiz completion
+    @State private var quizCompleted: Bool = false
     
     @StateObject private var viewModel = QuizViewModel()
-    
-    var installationDate: Date {
-        get {
-            Date(timeIntervalSince1970: installationDateTimestamp)
-        }
-        set {
-            installationDateTimestamp = newValue.timeIntervalSince1970
-        }
-    }
-    
+        
     var body: some View {
         NavigationView { // Added NavigationView
             if quizCompleted {
@@ -81,7 +69,7 @@ struct QuizView: View {
                     Button(action: {
                         if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
                             viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                            quizCompleted = true // Set quizCompleted to true on successful quiz completion
+                            quizCompleted = true
                         } else {
                             showAlert = true
                         }

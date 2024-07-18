@@ -6,11 +6,7 @@ import FirebaseAuth
 
 class AuthModel: ObservableObject {
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
-    
-    init() {
-        FirebaseConfiguration.shared.setLoggerLevel(.debug)
-    }
-    
+
     func pushNewValue(username: String, email: String, password: String, completion: @escaping (Error?) -> Void) {
         checkUsernameExists(username: username) { exists in
             if exists {
