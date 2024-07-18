@@ -101,7 +101,7 @@ struct DiaryView: View {
             .padding([.horizontal, .bottom], 20)
             .disabled(isFutureDate(selectedDate))
             .sheet(isPresented: $showingSheet) {
-                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes in
+                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes, date in
                     if entryToEdit == nil {
                         addEntry(newEntry, smoked, cigarettes)
                     } else {
@@ -109,7 +109,7 @@ struct DiaryView: View {
                     }
                     saveDiaryEntries()
                     showingSheet = false
-                })
+                }, selectedDate: selectedDate)
             }
                         
         }
@@ -216,12 +216,15 @@ struct DiaryView: View {
     }
 }
 
+
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false
     @State private var cigarettesSmoked: Int = 0
-    var saveAction: (String, Bool, String) -> Void
+    
+    var saveAction: (String, Bool, String, Date) -> Void
     @StateObject private var diaryModel = DiaryViewModel()
+    var selectedDate: Date
 
     var body: some View {
         
@@ -247,9 +250,9 @@ struct DiaryEntryView: View {
                 .border(Color.gray, width: 2)
                 .frame(height: 200)
             Button(action: {
-                // Pass the formatted date string to your model method
-                saveAction(entry, smokedToday, String(cigarettesSmoked))
-                diaryModel.pushNewValue(currentDate: Date(), cigSmokedToday: cigarettesSmoked)
+                // Pass the selected date along with other values
+                saveAction(entry, smokedToday, String(cigarettesSmoked), selectedDate)
+                diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: cigarettesSmoked)
             }) {
                     Text("Salva")
                     .foregroundColor(.white)
@@ -263,6 +266,7 @@ struct DiaryEntryView: View {
         }
     }
 }
+
 
 struct CalendarView: View {
     @Binding var selectedDate: Date

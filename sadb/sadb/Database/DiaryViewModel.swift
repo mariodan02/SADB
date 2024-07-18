@@ -24,8 +24,8 @@ class DiaryViewModel: ObservableObject {
                     dateString: cigSmokedToday
                 ]
 
-                // Store the quiz data directly under the username node
-                self.ref.child("usernames").child(user.uid).child("diaryData").setValue(diaryData) { error, _ in
+                // Update the diaryData under the username node
+                self.ref.child("usernames").child(user.uid).child("diaryData").updateChildValues(diaryData) { error, _ in
                     if let error = error {
                         print("Error pushing quiz data: \(error.localizedDescription)")
                     } else {
@@ -37,6 +37,7 @@ class DiaryViewModel: ObservableObject {
             }
         }
     }
+}
 
 
     private func extractCigaretteCount(from entry: String) -> Int? {
@@ -47,5 +48,4 @@ class DiaryViewModel: ObservableObject {
         }
         return nil
     }
-}
 
