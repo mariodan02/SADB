@@ -6,6 +6,7 @@ struct DiaryView: View {
     @State private var showingSheet = false
     @State private var entryToEdit: String? = nil
     @State private var cigarettesSmokedDiary: Int = 0
+    @StateObject private var diaryModel = DiaryViewModel()
     
     var body: some View {
         VStack {
@@ -100,7 +101,7 @@ struct DiaryView: View {
             .padding([.horizontal, .bottom], 20)
             .disabled(isFutureDate(selectedDate))
             .sheet(isPresented: $showingSheet) {
-                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes in
+                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes, date in
                     if entryToEdit == nil {
                         addEntry(newEntry, smoked, cigarettes)
                     } else {
@@ -108,7 +109,7 @@ struct DiaryView: View {
                     }
                     saveDiaryEntries()
                     showingSheet = false
-                })
+                }, selectedDate: selectedDate)
             }
                         
         }
@@ -184,8 +185,11 @@ struct DiaryView: View {
                 fullEntry += "\nHai fumato oggi: No"
             }
             diaryEntries[dateKey]?[index] = fullEntry
+            // Aggiorniamo il database con i nuovi valori
+            diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: Int(cigarettes) ?? 0)
         }
     }
+
     
     func deleteEntry(_ entry: String) {
         let dateKey = formattedDate(selectedDate)
@@ -197,6 +201,8 @@ struct DiaryView: View {
             }
             diaryEntries[dateKey]?.remove(at: index)
             saveDiaryEntries()
+            // Aggiorniamo il database con i nuovi valori
+            diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: 0)
         }
     }
     
@@ -210,12 +216,16 @@ struct DiaryView: View {
     }
 }
 
+
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false
-    @State private var cigarettesSmoked: String = ""
-    var saveAction: (String, Bool, String) -> Void
+    @State private var cigarettesSmoked: Int = 0
     
+    var saveAction: (String, Bool, String, Date) -> Void
+    @StateObject private var diaryModel = DiaryViewModel()
+    var selectedDate: Date
+
     var body: some View {
         
         Text("Scrivi la tua annotazione")
@@ -229,16 +239,10 @@ struct DiaryEntryView: View {
             .padding()
             
             if smokedToday {
-                TextField("Quante sigarette hai fumato oggi?", text: $cigarettesSmoked)
+                TextField("Quante sigarette hai fumato oggi?", value: $cigarettesSmoked, formatter: NumberFormatter())
                     .padding()
                     .border(Color.gray, width: 1)
                     .keyboardType(.numberPad)
-                    .onChange(of: cigarettesSmoked) { newValue in
-                        let filtered = newValue.filter { "0123456789".contains($0) }
-                        if filtered != newValue {
-                            cigarettesSmoked = filtered
-                        }
-                    }
             }
             
             TextEditor(text: $entry)
@@ -246,12 +250,14 @@ struct DiaryEntryView: View {
                 .border(Color.gray, width: 2)
                 .frame(height: 200)
             Button(action: {
-                saveAction(entry, smokedToday, cigarettesSmoked)
+                // Pass the selected date along with other values
+                saveAction(entry, smokedToday, String(cigarettesSmoked), selectedDate)
+                diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: cigarettesSmoked)
             }) {
-                Text("Salva")
+                    Text("Salva")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.green)
                     .cornerRadius(10)
             }
             .padding(.top, 20)
@@ -260,6 +266,7 @@ struct DiaryEntryView: View {
         }
     }
 }
+
 
 struct CalendarView: View {
     @Binding var selectedDate: Date
