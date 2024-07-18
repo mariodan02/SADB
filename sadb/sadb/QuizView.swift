@@ -5,7 +5,7 @@ struct QuizView: View {
     @State private var cigarettesPerDay: Double = 0
     @State private var packCost: Double = 0
     @State private var reasonToQuit: String = ""
-    
+
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
 
@@ -31,7 +31,7 @@ struct QuizView: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-            
+
             VStack(alignment: .leading) {
                 Text("Quante sigarette fumi in media al giorno?")
                     .padding(5)
@@ -44,7 +44,7 @@ struct QuizView: View {
                     .padding(10)
                     .keyboardType(.decimalPad)
             }
-            
+
             VStack(alignment: .leading) {
                 Text("Quanto costa un pacchetto di sigarette?")
                     .padding(5)
@@ -72,14 +72,9 @@ struct QuizView: View {
                     )
                     .padding(10)
             }
-            
-            Button(action: {
-                if cigarettesPerDay <= 0 || packCost <= 0 || reasonToQuit.isEmpty {
-                    showAlert = true
-                } else {
-                    hasCompletedQuiz = true
-                    viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                }
+
+            Button(action: {         
+                viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
             }) {
                 Text("Continua")
                     .foregroundColor(.white)
@@ -102,4 +97,3 @@ struct QuizView_Previews: PreviewProvider {
         QuizView()
     }
 }
-
