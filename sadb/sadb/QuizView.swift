@@ -97,14 +97,6 @@ struct QuizView: View {
             }
             .padding()
             .navigationBarBackButtonHidden() // Hide the back button
-            .onAppear {
-                viewModel.checkQuizCompletion { completed in
-                    if completed {
-                        quizCompleted = true
-                    }
-                }
-            }
-            
         }
     }
 }

@@ -37,22 +37,6 @@ class QuizViewModel: ObservableObject {
             }
         }
     }
-
-    func checkQuizCompletion(completion: @escaping (Bool) -> Void) {
-        guard let user = Auth.auth().currentUser else {
-            print("User not authenticated")
-            completion(false)
-            return
-        }
-
-        ref.child("usernames").child(user.uid).child("quizData").observeSingleEvent(of: .value) { snapshot in
-            if snapshot.exists() {
-                completion(true)
-            } else {
-                completion(false)
-            }
-        }
-    }
     
     // Funzione per recuperare i dati del quiz
     func fetchQuizData(completion: @escaping (Double?, Double?) -> Void) {
