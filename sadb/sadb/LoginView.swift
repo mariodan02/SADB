@@ -5,9 +5,10 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var loginSuccessful = false
     
     @AppStorage("isLogged") private var isLogged = false
-    @AppStorage("e_mail") private var e_mail : String = ""
+    @AppStorage("e_mail") private var e_mail: String = ""
     
     @StateObject var authModel = AuthModel()
     
@@ -29,6 +30,7 @@ struct LoginView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
                         .padding(.bottom, 20)
+                        .autocapitalization(.none)
                     
                     Text("Password")
                         .font(.headline)
@@ -36,6 +38,7 @@ struct LoginView: View {
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
+                        .autocapitalization(.none)
                         .padding(.bottom, 20)
                 }
                 .padding(.horizontal, 40)
@@ -48,6 +51,7 @@ struct LoginView: View {
                             print("Login successful for user: \(authDataResult.user.email ?? "")")
                             isLogged = true // Set isLogged to true
                             e_mail = email
+                            loginSuccessful = true // Set loginSuccessful to true to navigate
                         case .failure(let error):
                             // Handle login error
                             print("Login failed with error: \(error.localizedDescription)")
@@ -74,7 +78,11 @@ struct LoginView: View {
                         .foregroundColor(.green)
                         .padding(.top, 10)
                 }
-
+                
+                NavigationLink(destination: ProgressView(), isActive: $loginSuccessful) {
+                    EmptyView()
+                }
+                
                 Spacer()
             }
         }

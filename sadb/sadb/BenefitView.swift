@@ -34,6 +34,7 @@ struct BenefitView: View {
                 
                 Spacer()
             }
+            .padding(.top, 20)
         }
         .background(Color(.systemGreen).opacity(0.1)) // Colore di sfondo per lo ScrollView
         .navigationTitle("Benefici su \(organ.name)")
@@ -104,3 +105,4 @@ struct LinkPreviewView: UIViewRepresentable {
         Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
     ])))
 }
+
