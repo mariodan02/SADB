@@ -15,7 +15,7 @@ struct ProgressView: View {
         let daysSinceInstallation = Date().timeIntervalSince1970 - installationDateTimestamp
         return Int(daysSinceInstallation / 86400.0)
     }
-
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -57,7 +57,7 @@ struct ProgressView: View {
                 
                 // Bottoni
                 VStack(spacing: 15) {
-                    NavigationLink(destination: GoalsView(moneySaved: moneySaved, daysWithoutSmoking: daysWithoutSmoking)) {
+                    NavigationLink(destination: GoalsView()){
                         Text("Obiettivi raggiunti")
                             .foregroundColor(.black)
                             .frame(maxWidth: 200)
@@ -92,17 +92,7 @@ struct ProgressView: View {
             .navigationTitle("Progressi")
             .navigationBarTitleDisplayMode(.large)
         }
-        .onAppear(perform: loadData)
-    }
-
-    func loadData() {
-        if let savedCigarettesPerDay = UserDefaults.standard.value(forKey: "cigarettesPerDay") as? Double {
-            cigarettesPerDay = savedCigarettesPerDay
-        }
-        if let savedPackCost = UserDefaults.standard.value(forKey: "packCost") as? Double {
-            packCost = savedPackCost
-        }
-        installationDateTimestamp = UserDefaults.standard.double(forKey: "installationDate")
+        // .onAppear(perform: loadData)
     }
 }
 

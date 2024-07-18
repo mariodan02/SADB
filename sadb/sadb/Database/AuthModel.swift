@@ -2,45 +2,68 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import FirebaseAuth
 
-class AutenticationModel: ObservableObject{
-    //in ref ci troviamo la root del mio db
-    private let ref = Database.database().reference()
+class AuthModel: ObservableObject {
+    private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
     
-    func pushNewValue(value: String){
-        print("Hello world")
-        ref.child("any Name").setValue(value)
+    init() {
+        FirebaseConfiguration.shared.setLoggerLevel(.debug)
     }
     
-    func checkUsernameExists(username: String, completion: @escaping (Bool) -> Void) {
-           // Crea un riferimento al nodo "username"
-           let usernameRef = ref.child("username")
-           
-           // Esegue una query per cercare il username specifico
-            usernameRef.queryOrdered(byChild: "name").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
-               if snapshot.exists() {
-                   completion(true) // Il username esiste
-               } else {
-                   completion(false) // Il username non esiste
-               }
-           }
-       }
-    
-    func pushNewUsername(username: String) {
-        // Crea un nuovo riferimento sotto "nickname" con una chiave univoca
-        let newUsernameRef = ref.child("username").childByAutoId()
-        
-        // Imposta i valori per il nuovo oggetto
-        let usernameData: [String: Any] = ["name": username]
-        
-        // Scrive i dati nel database
-        newUsernameRef.setValue(usernameData) { error, _ in
+    func pushNewValue(username: String, email: String, password: String, completion: @escaping (Error?) -> Void) {
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                print("Errore durante la scrittura dei dati: \(error.localizedDescription)")
-            } else {
-                print("Dati scritti correttamente nel database")
+                print("Error creating user: \(error.localizedDescription)")
+                completion(error)
+                return
+            }
+            guard let uid = authResult?.user.uid else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User UID not found"]))
+                return
+            }
+            // Store the username in the database with the UID as the key
+            self.pushNewUsername(uid: uid, username: username) { error in
+                if let error = error {
+                    print("Error pushing new username: \(error.localizedDescription)")
+                }
+                completion(error)
             }
         }
     }
-        
+
+    func login(email: String, password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                print("Error signing in: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            if let authResult = authResult {
+                completion(.success(authResult))
+            }
+        }
+    }
+    
+    func checkUsernameExists(username: String, completion: @escaping (Bool) -> Void) {
+        let usernameRef = ref.child("usernames")
+        usernameRef.queryOrdered(byChild: "name").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
+            completion(snapshot.exists())
+        } withCancel: { error in
+            print("Error checking username existence: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
+    
+    func pushNewUsername(uid: String, username: String, completion: @escaping (Error?) -> Void) {
+        let newUsernameRef = ref.child("usernames").child(uid)
+        let usernameData: [String: Any] = ["name": username]
+        newUsernameRef.setValue(usernameData) { error, _ in
+            if let error = error {
+                print("Error pushing new username: \(error.localizedDescription)")
+            }
+            completion(error)
+        }
+    }
 }
+
