@@ -13,6 +13,8 @@ struct WishListView: View {
     @State private var wishList = [WishItem]() // Empty initial list
     @State private var isPresentingAddWishItem = false
     
+    var packCost: Double?
+    
     var body: some View {
         ZStack {
             Color.green.opacity(0.1).edgesIgnoringSafeArea(.all)
@@ -61,7 +63,7 @@ struct WishListView: View {
                     .foregroundColor(.green)
             })
             .sheet(isPresented: $isPresentingAddWishItem) {
-                AddWishItemView(wishList: $wishList)
+                AddWishItemView(wishList: $wishList, packCost: packCost)
             }
         }
         .navigationBarTitle("Wishlist")
@@ -84,7 +86,7 @@ struct AddWishItemView: View {
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var showAlert = false
     @State private var showNameAlert = false // New state for name validation alert
-    @AppStorage("packCost") private var packCost: String = "0.0"
+    var packCost: Double?
 
     var body: some View {
         NavigationView {
@@ -128,7 +130,7 @@ struct AddWishItemView: View {
                         return
                     }
                     
-                    guard let costValue = Double(cost), let packCostValue = Double(packCost) else { return }
+                    guard let costValue = Double(cost), let packCostValue = packCost else { return }
                     let equivalentPacks = Int(costValue / packCostValue)
                     let equivalentText = "\(equivalentPacks) pacchetti di sigarette"
                     let newItem = WishItem(

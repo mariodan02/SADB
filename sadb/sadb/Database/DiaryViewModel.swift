@@ -38,14 +38,3 @@ class DiaryViewModel: ObservableObject {
         }
     }
 }
-
-
-    private func extractCigaretteCount(from entry: String) -> Int? {
-        let pattern = "Quante sigarette: (\\d+)"
-        if let range = entry.range(of: pattern, options: .regularExpression),
-           let match = entry[range].split(separator: " ").last {
-            return Int(match)
-        }
-        return nil
-    }
-

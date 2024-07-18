@@ -19,17 +19,13 @@ struct sadbApp: App {
     
     var body: some Scene {
         WindowGroup {
-<<<<<<< HEAD
             
             if (!isLogged){
                 LoginView()
             } else {
                 ContentView()
             }
-            
-=======
-            DiaryView()
->>>>>>> ff8acc1be219510e95545b2d00acd6cd4bbbcce6
+
         }
     }
 }

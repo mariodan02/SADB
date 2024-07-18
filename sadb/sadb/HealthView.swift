@@ -26,11 +26,13 @@ struct HealthView: View {
             Organ(name: "Pelle", image: "pelle", articles: [
                 Article(title: "Cos'è la faccia del fumatore e perché il fumo invecchia la pelle", url: URL(string: "https://www.my-personaltrainer.it/salute-benessere/faccia-del-fumatore-invecchia-pelle.html")!),
                 Article(title: "Fumo e pelle: liberati dalla sigaretta e riacquista la bellezza del viso", url: URL(string: "https://style.corriere.it/benessere/salute/fumo-e-pelle-riacquista-bellezza-viso-dopo-lo-stop/")!),
-                Article(title: "Smettere di fumare può ringiovanire la tua pelle, scopri perché", url: URL(string: "https://www.estelitebari.it/smettere-di-fumare-puo-ringiovanire-la-tua-pelle/")!)
+                Article(title: "Smettere di fumare può ringiovanire la tua pelle", url: URL(string: "https://www.estelitebari.it/smettere-di-fumare-puo-ringiovanire-la-tua-pelle/")!)
             ])
         ]
     
     @State private var dailyCigarettes = 20
+    var initialCigarettesPerDay: Double?
+    var currentCigarettesPerDay: Double?
     @State private var lungPercentage = 0
     @State private var heartPercentage = 0
     @State private var brainPercentage = 0
@@ -83,10 +85,19 @@ struct HealthView: View {
     }
     
     func updateHealthBenefits() {
-        //modificare il metodo
-        lungPercentage = max(0, 100 - dailyCigarettes * 2)
-        heartPercentage = max(0, 100 - dailyCigarettes * 3)
-        brainPercentage = max(0, 100 - dailyCigarettes * 4)
+//        guard let initialCigarettes = initialCigarettesPerDay,
+//                      let currentCigarettes = currentCigarettesPerDay else {
+//                    lungPercentage = 0
+//                    heartPercentage = 0
+//                    brainPercentage = 0
+//                    return
+//                }
+//        
+//        let cigarettesReduced = initialCigarettesPerDay - currentCigarettesPerDay
+//                
+//        lungPercentage = min(100, cigarettesReduced * 2)
+//        heartPercentage = min(100, cigarettesReduced * 3)
+//        brainPercentage = min(100, cigarettesReduced * 4)
       }
 }
 
