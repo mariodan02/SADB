@@ -1,43 +1,65 @@
 import SwiftUI
-
 struct GoalsView: View {
     let columns = [
         GridItem(.flexible(), spacing: 20),
         GridItem(.flexible(), spacing: 20)
     ]
     
+    var moneySaved: Double
+    var daysWithoutSmoking: Int
+    
     var body: some View {
-            VStack {
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        GoalItem(imageName: "1.circle", subtitle: "Non ho fumato per 1 giorno", achieved: true)
-                                               GoalItem(imageName: "2.circle", subtitle: "Non ho fumato per 2 giorni", achieved: true)
-                                               GoalItem(imageName: "3.circle", subtitle: "Non ho fumato per 3 giorni", achieved: true)
-                                               GoalItem(imageName: "4.circle", subtitle: "Non ho fumato per 4 giorni", achieved: true)
-                                               GoalItem(imageName: "5.circle", subtitle: "Non ho fumato per 5 giorni", achieved: true)
-                                               GoalItem(imageName: "6.circle", subtitle: "Non ho fumato per 6 giorni", achieved: true)
-                                               GoalItem(imageName: "7.circle", subtitle: "Non ho fumato per 1 settimana", achieved: true)
-                                               GoalItem(imageName: "14.circle", subtitle: "Non ho fumato per 2 settimane", achieved: false)
-                                               GoalItem(imageName: "21.circle", subtitle: "Non ho fumato per 3 settimane", achieved: false)
-                                               GoalItem(imageName: "28.circle", subtitle: "Non ho fumato per 4 settimane", achieved: false)
-                                               GoalItem(imageName: "1.circle.fill", subtitle: "Non ho fumato per 1 mese", achieved: false)
-                                                GoalItem(imageName: "2.circle.fill", subtitle: "Non ho fumato per 2 mesi", achieved: false)
-                                                GoalItem(imageName: "3.circle.fill", subtitle: "Non ho fumato per 3 mesi", achieved: false)
-                                                GoalItem(imageName: "4.circle.fill", subtitle: "Non ho fumato per 4 mesi", achieved: false)
-                                                GoalItem(imageName: "5.circle.fill", subtitle: "Non ho fumato per 5 mesi", achieved: false)
-                                                GoalItem(imageName: "6.circle.fill", subtitle: "Non ho fumato per 6 mesi", achieved: false)
-                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €10", achieved: false)
-                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €20", achieved: false)
-                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €50", achieved: false)
-                                               GoalItem(imageName: "eurosign.circle", subtitle: "Ho risparmiato €100", achieved: false)
-                    }
-                    .padding()
-                }
-                Spacer()
-            }
-            .navigationBarTitle("Obiettivi raggiunti")
-            .background(Color.green.opacity(0.1))
+        // Definiamo gli obiettivi come tuple di (imageName, subtitle, achieved)
+        let goals: [(String, String, Bool)] = [
+            ("1.circle", "Non ho fumato per 1 giorno", daysWithoutSmoking>=1),
+            ("2.circle", "Non ho fumato per 2 giorni", daysWithoutSmoking>=2),
+            ("3.circle", "Non ho fumato per 3 giorni", daysWithoutSmoking>=3),
+            ("4.circle", "Non ho fumato per 4 giorni", daysWithoutSmoking>=4),
+            ("5.circle", "Non ho fumato per 5 giorni", daysWithoutSmoking>=5),
+            ("6.circle", "Non ho fumato per 6 giorni", daysWithoutSmoking>=6),
+            ("7.circle", "Non ho fumato per 1 settimana", daysWithoutSmoking>=7),
+            ("14.circle", "Non ho fumato per 2 settimane", daysWithoutSmoking>=14),
+            ("21.circle", "Non ho fumato per 3 settimane", daysWithoutSmoking>=21),
+            ("28.circle", "Non ho fumato per 4 settimane", daysWithoutSmoking>=28),
+            ("1.circle.fill", "Non ho fumato per 1 mese", daysWithoutSmoking>=31),
+            ("2.circle.fill", "Non ho fumato per 2 mesi", daysWithoutSmoking >= 60),
+            ("3.circle.fill", "Non ho fumato per 3 mesi", daysWithoutSmoking >= 90),
+            ("4.circle.fill", "Non ho fumato per 4 mesi", daysWithoutSmoking >= 120),
+            ("5.circle.fill", "Non ho fumato per 5 mesi", daysWithoutSmoking >= 150),
+            ("6.circle.fill", "Non ho fumato per 6 mesi", daysWithoutSmoking >= 180),
+            ("calendar.circle", "Non ho fumato per 1 anno", daysWithoutSmoking >= 365),
+            ("eurosign.circle", "Ho risparmiato €10", moneySaved >= 10),
+            ("eurosign.circle", "Ho risparmiato €20", moneySaved >= 20),
+            ("eurosign.circle", "Ho risparmiato €30", moneySaved >= 30),
+            ("eurosign.circle", "Ho risparmiato €40", moneySaved >= 40),
+            ("eurosign.circle", "Ho risparmiato €50", moneySaved >= 50),
+            ("eurosign.circle", "Ho risparmiato €100", moneySaved >= 100),
+            ("eurosign.circle", "Ho risparmiato €150", moneySaved >= 150),
+            ("eurosign.circle", "Ho risparmiato €200", moneySaved >= 200),
+        ]
         
+        // Filtriamo gli obiettivi raggiunti e non raggiunti
+        let achievedGoals = goals.filter { $0.2 }
+        let unachievedGoals = goals.filter { !$0.2 }
+        
+        VStack {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    // Visualizziamo prima gli obiettivi raggiunti
+                    ForEach(achievedGoals, id: \.1) { goal in
+                        GoalItem(imageName: goal.0, subtitle: goal.1, achieved: goal.2)
+                    }
+                    // Visualizziamo poi gli obiettivi non raggiunti
+                    ForEach(unachievedGoals, id: \.1) { goal in
+                        GoalItem(imageName: goal.0, subtitle: goal.1, achieved: goal.2)
+                    }
+                }
+                .padding()
+            }
+            Spacer()
+        }
+        .navigationBarTitle("Obiettivi raggiunti")
+        .background(Color.green.opacity(0.1))
     }
 }
 
@@ -58,7 +80,7 @@ struct GoalItem: View {
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
         }
-        .frame(width: 130, height: 130) // Ensuring all items have the same size
+        .frame(width: 130, height: 130)
         .padding(20)
         .background(achieved ? Color.white : Color.black.opacity(0.1))
         .cornerRadius(10)
@@ -67,6 +89,5 @@ struct GoalItem: View {
 }
 
 #Preview {
-    GoalsView()
+    GoalsView(moneySaved: 20, daysWithoutSmoking: 5)
 }
-
