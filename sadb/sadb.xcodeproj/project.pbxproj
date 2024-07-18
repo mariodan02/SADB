@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F37D3192C47DF20006DB2D0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1F37D3182C47DF20006DB2D0 /* FirebaseAuth */; };
 		1F46E06D2C491B6500988C19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F46E06C2C491B6500988C19 /* GoogleService-Info.plist */; };
+		1F46E06F2C492B3D00988C19 /* DiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */; };
 		1F588D342C344AC300879952 /* sadbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F588D332C344AC300879952 /* sadbApp.swift */; };
 		1F588D362C344AC300879952 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F588D352C344AC300879952 /* ContentView.swift */; };
 		1F588D382C344AC500879952 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F588D372C344AC500879952 /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 
 /* Begin PBXFileReference section */
 		1F46E06C2C491B6500988C19 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewModel.swift; sourceTree = "<group>"; };
 		1F588D302C344AC300879952 /* sadb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sadb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F588D332C344AC300879952 /* sadbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sadbApp.swift; sourceTree = "<group>"; };
 		1F588D352C344AC300879952 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			children = (
 				1FC88C4E2C4566EE009FDA60 /* QuizViewModel.swift */,
 				1FC0069E2C45691900CB34D4 /* AuthModel.swift */,
+				1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				1FC7393D2C3828580049EB44 /* WishListView.swift in Sources */,
 				1F588D362C344AC300879952 /* ContentView.swift in Sources */,
 				1FC7393F2C3828660049EB44 /* MyTreeView.swift in Sources */,
+				1F46E06F2C492B3D00988C19 /* DiaryViewModel.swift in Sources */,
 				1FE89D192C456BCF00420385 /* RegistrationView.swift in Sources */,
 				1FC739432C3828850049EB44 /* GoalsView.swift in Sources */,
 				1FE89D122C45074900420385 /* BenefitView.swift in Sources */,
