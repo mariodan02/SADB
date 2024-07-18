@@ -103,7 +103,7 @@ struct AddWishItemView: View {
                                         .clipShape(Circle())
                                         .overlay(Circle().stroke(Color.gray, lineWidth: 1))
                                 } else {
-                                    Text("- Qui puoi inserire un'immagine-")
+                                    Text("Qui puoi inserire un'immagine")
                                     Image(systemName: "photo.circle.fill")
                                         .resizable()
                                         .frame(width: 100, height: 100)
