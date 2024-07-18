@@ -21,11 +21,11 @@ class QuizViewModel: ObservableObject {
                     "cigarettesPerDay": cigarettesPerDay,
                     "packCost": packCost,
                     "reasonToQuit": reasonToQuit,
-                    "timestamp": Date().timeIntervalSince1970
+                    "timestamp": Date().timeIntervalSince1970,
                 ] as [String: Any]
 
-                // Store the quiz data under the username node
-                self.ref.child("usernames").child(user.uid).child("quizData").childByAutoId().setValue(quizData) { error, _ in
+                // Store the quiz data directly under the username node
+                self.ref.child("usernames").child(user.uid).child("quizData").setValue(quizData) { error, _ in
                     if let error = error {
                         print("Error pushing quiz data: \(error.localizedDescription)")
                     } else {
@@ -34,6 +34,22 @@ class QuizViewModel: ObservableObject {
                 }
             } else {
                 print("Username not found for the current user.")
+            }
+        }
+    }
+
+    func checkQuizCompletion(completion: @escaping (Bool) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            completion(false)
+            return
+        }
+
+        ref.child("usernames").child(user.uid).child("quizData").observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                completion(true)
+            } else {
+                completion(false)
             }
         }
     }

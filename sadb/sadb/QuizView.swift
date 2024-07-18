@@ -3,16 +3,17 @@ import FirebaseCore
 
 struct QuizView: View {
     @State private var cigarettesPerDay: Double = 0
-    @State private var packCost: Double = 0
+    @State private var packCost: Double = 0.0
     @State private var reasonToQuit: String = ""
-
+    
     @AppStorage("installationDate") private var installationDateTimestamp: Double = Date().timeIntervalSince1970
     @AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
-
+    
     @State private var showAlert: Bool = false
-
+    @State private var quizCompleted: Bool = false // New state for tracking quiz completion
+    
     @StateObject private var viewModel = QuizViewModel()
-
+    
     var installationDate: Date {
         get {
             Date(timeIntervalSince1970: installationDateTimestamp)
@@ -21,76 +22,96 @@ struct QuizView: View {
             installationDateTimestamp = newValue.timeIntervalSince1970
         }
     }
-
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Spacer()
-                Text("Parlaci di te")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Spacer()
-            }
-
-            VStack(alignment: .leading) {
-                Text("Quante sigarette fumi in media al giorno?")
-                    .padding(5)
-                TextField("", value: $cigarettesPerDay, formatter: NumberFormatter())
+        NavigationView { // Added NavigationView
+            if quizCompleted {
+                ProgressView()
+            } else {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Spacer()
+                        Text("Parlaci di te")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        Spacer()
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Quante sigarette fumi in media al giorno?")
+                            .padding(5)
+                        TextField("", value: $cigarettesPerDay, formatter: NumberFormatter())
+                            .padding()
+                            .frame(width: 70, height: 30)
+                            .overlay(RoundedRectangle(cornerRadius: 7)
+                                .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .padding(10)
+                            .keyboardType(.decimalPad)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Quanto costa un pacchetto di sigarette?")
+                            .padding(5)
+                        HStack {
+                            TextField("", value: $packCost, formatter: NumberFormatter())
+                                .padding()
+                                .frame(width: 70, height: 30)
+                                .overlay(RoundedRectangle(cornerRadius: 7)
+                                    .stroke(Color.gray, lineWidth: 1)
+                                )
+                                .padding(.leading, 10)
+                                .keyboardType(.decimalPad)
+                            Text("€")
+                        }
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Perché vuoi smettere di fumare?")
+                            .padding(5)
+                        TextField("", text: $reasonToQuit)
+                            .padding()
+                            .frame(height: 200)
+                            .overlay(RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .padding(10)
+                    }
+                    
+                    Button(action: {
+                        if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
+                            viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
+                            quizCompleted = true // Set quizCompleted to true on successful quiz completion
+                        } else {
+                            showAlert = true
+                        }
+                    }) {
+                        Text("Continua")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.green)
+                            .cornerRadius(10)
+                    }
                     .padding()
-                    .frame(width: 70, height: 30)
-                    .overlay(RoundedRectangle(cornerRadius: 7)
-                        .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .padding(10)
-                    .keyboardType(.decimalPad)
-            }
-
-            VStack(alignment: .leading) {
-                Text("Quanto costa un pacchetto di sigarette?")
-                    .padding(5)
-                HStack {
-                    TextField("", value: $packCost, formatter: NumberFormatter())
-                        .padding()
-                        .frame(width: 70, height: 30)
-                        .overlay(RoundedRectangle(cornerRadius: 7)
-                            .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .padding(.leading, 10)
-                        .keyboardType(.decimalPad)
-                    Text("€")
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Errore"), message: Text("Per favore, compila tutti i campi."), dismissButton: .default(Text("OK")))
+                    }
+                    
+                    Spacer()
+                }
+                .padding()
+                .onAppear {
+                    viewModel.checkQuizCompletion { completed in
+                        if completed {
+                            quizCompleted = true
+                        }
+                    }
                 }
             }
-
-            VStack(alignment: .leading) {
-                Text("Perché vuoi smettere di fumare?")
-                    .padding(5)
-                TextField("", text: $reasonToQuit)
-                    .padding()
-                    .frame(height: 200)
-                    .overlay(RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .padding(10)
-            }
-
-            Button(action: {         
-                viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-            }) {
-                Text("Continua")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(10)
-            }
-            .padding()
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Errore"), message: Text("Per favore, compila tutti i campi."), dismissButton: .default(Text("OK")))
-            }
-            Spacer()
         }
-        .padding()
     }
 }
+
 
 struct QuizView_Previews: PreviewProvider {
     static var previews: some View {
