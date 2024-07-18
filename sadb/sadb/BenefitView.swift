@@ -38,20 +38,28 @@ struct BenefitView: View {
         .background(Color(.systemGreen).opacity(0.1)) // Colore di sfondo per lo ScrollView
         .navigationTitle("Benefici su \(organ.name)")
         .sheet(isPresented: $isSheetPresented) {
-            if let article = selectedArticle {
-                ArticleView(article: article)
-            }
+                    if let article = selectedArticle {
+                        ArticleView(article: article, isPresented: $isSheetPresented)
+                    }
         }
     }
 }
 
 struct ArticleView: View {
     var article: Article
+    @Binding var isPresented: Bool
     
     var body: some View {
-        WebView(url: article.url)
-            .navigationTitle(article.title)
-            .navigationBarTitleDisplayMode(.inline)
+        NavigationView {
+            WebView(url: article.url)
+                .navigationTitle(article.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(trailing: Button(action: {
+                    isPresented = false
+                }) {
+                    Text("Fine")
+                })
+        }
     }
 }
 
