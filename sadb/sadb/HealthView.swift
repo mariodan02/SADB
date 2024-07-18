@@ -3,30 +3,30 @@ import SwiftUI
 struct HealthView: View {
     @State var organs = [
             Organ(name: "Cuore", image: "cuore", articles: [
-                Article(title: "Articolo 1", url: URL(string: "https://www.sbmedical.it/blog/smettere-di-fumare-puo-salvare-il-cuore-ecco-perche/")!),
-                Article(title: "Articolo 2", url: URL(string: "https://swissheart.ch/it/mantensersi-sani/una-vita-sana/smettere-di-fumare")!),
-                Article(title: "Articolo 3", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/angina-pectoris/")!),
-                Article(title: "Articolo 4", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/infarto/")!),
-                Article(title: "Articolo 5", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/ipertensione-arteriosa/")!)
+                Article(title: "Smettere di fumare può salvare il cuore: ecco perché ", url: URL(string: "https://www.sbmedical.it/blog/smettere-di-fumare-puo-salvare-il-cuore-ecco-perche/")!),
+                Article(title: "Smettere di fumare", url: URL(string: "https://swissheart.ch/it/mantensersi-sani/una-vita-sana/smettere-di-fumare")!),
+                Article(title: "Tabacco e cuore", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/angina-pectoris/")!),
+                Article(title: "Tabagismo e rischio di infarto cardiaco", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/infarto/")!),
+                Article(title: "Ipertensione arteriosa e tabagismo", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/ipertensione-arteriosa/")!)
             ]),
             Organ(name: "Polmoni", image: "polmoni", articles: [
-                Article(title: "Articolo 1", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/fumo/cosi-i-polmoni-si-rigenerano-dopo-aver-smesso-di-fumare")!),
-                Article(title: "Articolo 2", url: URL(string: "https://www.my-personaltrainer.it/salute-benessere/smettere-di-fumare-entro-i-35-anni-fa-tornare-i-polmoni-come-nuovi.html")!),
-                Article(title: "Articolo 3", url: URL(string: "https://www.sigmagazine.it/2020/01/studio-polmoni-riparano-se-stessi/")!),
-                Article(title: "Articolo 4", url: URL(string: "https://www.stop-tabacco.ch/salute/i-tumori-dovuti-al-tabagismo/tumore-del-polmone/")!),
-                Article(title: "Articolo 5", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-polmonari/asma-e-tabacco/")!)
+                Article(title: "Così i polmoni si 'rigenerano' smettendo di fumare", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/fumo/cosi-i-polmoni-si-rigenerano-dopo-aver-smesso-di-fumare")!),
+                Article(title: "Smettere di fumare entro i 35 anni fa tornare i polmoni come nuovi", url: URL(string: "https://www.my-personaltrainer.it/salute-benessere/smettere-di-fumare-entro-i-35-anni-fa-tornare-i-polmoni-come-nuovi.html")!),
+                Article(title: "Studio, i polmoni si autoriparano dopo aver smesso di fumare", url: URL(string: "https://www.sigmagazine.it/2020/01/studio-polmoni-riparano-se-stessi/")!),
+                Article(title: "Cancro al polmone: cosa c'è da sapere", url: URL(string: "https://www.stop-tabacco.ch/salute/i-tumori-dovuti-al-tabagismo/tumore-del-polmone/")!),
+                Article(title: "Asma e tabacco", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-polmonari/asma-e-tabacco/")!)
             ]),
             Organ(name: "Cervello", image: "cervello", articles: [
-                Article(title: "Articolo 1", url: URL(string: "https://www.corriere.it/salute/23_agosto_10/smettere-fumare-fa-funzionare-meglio-cervello-93be54d2-1a4f-11ee-803d-db3b1d875840.shtml")!),
-                Article(title: "Articolo 2", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/i-nostri-ricercatori/cosa-succede-al-cervello-durante-lastinenza-da-fumo-di-sigaretta")!),
-                Article(title: "Articolo 3", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/fumo/con-il-fumo-il-cervello-si-restringe")!),
-                Article(title: "Articolo 4", url: URL(string: "https://www.corriere.it/salute/sportello_cancro/11_maggio_19/fumare-smettere-super-cervello_9c3e9e36-766b-11e0-b432-72ecee218af7.shtml")!),
-                Article(title: "Articolo 5", url: URL(string: "https://www.humanitas.it/news/smettere-di-fumare-i-benefici/")!)
+                Article(title: "Smettere di fumare fa funzionare meglio il cervello", url: URL(string: "https://www.corriere.it/salute/23_agosto_10/smettere-fumare-fa-funzionare-meglio-cervello-93be54d2-1a4f-11ee-803d-db3b1d875840.shtml")!),
+                Article(title: "Cosa succede al cervello se ci si astiene dalle sigarette", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/i-nostri-ricercatori/cosa-succede-al-cervello-durante-lastinenza-da-fumo-di-sigaretta")!),
+                Article(title: "Con il fumo il cervello si restringe", url: URL(string: "https://www.fondazioneveronesi.it/magazine/articoli/fumo/con-il-fumo-il-cervello-si-restringe")!),
+                Article(title: "Smetti di fumare e avrai un cervello super", url: URL(string: "https://www.corriere.it/salute/sportello_cancro/11_maggio_19/fumare-smettere-super-cervello_9c3e9e36-766b-11e0-b432-72ecee218af7.shtml")!),
+                Article(title: "Smettere di fumare: i benefici", url: URL(string: "https://www.humanitas.it/news/smettere-di-fumare-i-benefici/")!)
             ]),
             Organ(name: "Pelle", image: "pelle", articles: [
-                Article(title: "Articolo 1", url: URL(string: "https://www.my-personaltrainer.it/salute-benessere/faccia-del-fumatore-invecchia-pelle.html")!),
-                Article(title: "Articolo 2", url: URL(string: "https://style.corriere.it/benessere/salute/fumo-e-pelle-riacquista-bellezza-viso-dopo-lo-stop/")!),
-                Article(title: "Articolo 3", url: URL(string: "https://www.estelitebari.it/smettere-di-fumare-puo-ringiovanire-la-tua-pelle/")!)
+                Article(title: "Cos'è la faccia del fumatore e perché il fumo invecchia la pelle", url: URL(string: "https://www.my-personaltrainer.it/salute-benessere/faccia-del-fumatore-invecchia-pelle.html")!),
+                Article(title: "Fumo e pelle: liberati dalla sigaretta e riacquista la bellezza del viso", url: URL(string: "https://style.corriere.it/benessere/salute/fumo-e-pelle-riacquista-bellezza-viso-dopo-lo-stop/")!),
+                Article(title: "Smettere di fumare può ringiovanire la tua pelle, scopri perché", url: URL(string: "https://www.estelitebari.it/smettere-di-fumare-puo-ringiovanire-la-tua-pelle/")!)
             ])
         ]
     
