@@ -67,6 +67,8 @@ struct HealthView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
+                .cornerRadius(10)
+                .padding(.horizontal, 10)
                 
                 Spacer()
                 
@@ -74,17 +76,17 @@ struct HealthView: View {
             .padding()
             .background(Color(.systemGreen).opacity(0.1))
             .onAppear {
-                            updateHealthBenefits()
-                        }
+                updateHealthBenefits()
+            }
         }
         .navigationTitle("Salute")
     }
     
     func updateHealthBenefits() {
         //modificare il metodo
-          lungPercentage = max(0, 100 - dailyCigarettes * 2)
-          heartPercentage = max(0, 100 - dailyCigarettes * 3)
-          brainPercentage = max(0, 100 - dailyCigarettes * 4)
+        lungPercentage = max(0, 100 - dailyCigarettes * 2)
+        heartPercentage = max(0, 100 - dailyCigarettes * 3)
+        brainPercentage = max(0, 100 - dailyCigarettes * 4)
       }
 }
 

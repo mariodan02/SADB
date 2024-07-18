@@ -10,11 +10,10 @@ struct BenefitView: View {
     var body: some View {
         ScrollView{
             VStack {
-                Image(organ.image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
-                
+                Text("In questa sezione troverai una raccolta di articoli informativi su come il fumo può danneggiare \(organ.name.lowercased()) e i molteplici benefici che smettere di fumare può portare alla tua salute. \nEsplora le risorse per comprendere meglio gli effetti del tabagismo e scopri utili consigli per migliorare il tuo benessere.")
+                    .font(.body)
+                    .padding([.bottom, .horizontal], 20)
+
                 Spacer()
                 
                 ForEach(organ.articles) { article in
@@ -27,18 +26,20 @@ struct BenefitView: View {
                             .background(Color.white)
                             .cornerRadius(10)
                             .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
-                            .padding(.horizontal)
+                            .frame(maxWidth: UIScreen.main.bounds.width - 40)
+                            .padding(.horizontal, 20)
                             .padding(.vertical, 2)
                     }
                 }
                 
                 Spacer()
             }
-            .navigationTitle("Benefici su \(organ.name)")
-            .sheet(isPresented: $isSheetPresented) {
-                if let article = selectedArticle {
-                    ArticleView(article: article)
-                }
+        }
+        .background(Color(.systemGreen).opacity(0.1)) // Colore di sfondo per lo ScrollView
+        .navigationTitle("Benefici su \(organ.name)")
+        .sheet(isPresented: $isSheetPresented) {
+            if let article = selectedArticle {
+                ArticleView(article: article)
             }
         }
     }
@@ -90,7 +91,7 @@ struct LinkPreviewView: UIViewRepresentable {
 
 #Preview {
     BenefitView(organ: .constant(Organ(name: "Polmoni", image: "polmoni", articles: [
-        Article(title: "Articolo 1", url: URL(string: "https://www.salute.gov.it/portale/fumo/dettaglioContenutiFumo.jsp?lingua=italiano&id=5579&area=fumo&menu=vuoto#:~:text=Il%20fumo%20di%20tabacco%2C%20in,di%20cancro%2C%20cardiopatie%2C%20vasculopatie.")!),
+        Article(title: "Articolo 1", url: URL(string: "https://www.sbmedical.it/blog/smettere-di-fumare-puo-salvare-il-cuore-ecco-perche/")!),
         Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
         Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
     ])))

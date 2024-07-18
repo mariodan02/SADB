@@ -91,25 +91,29 @@ struct AddWishItemView: View {
             Form {
                 Section {
                     VStack {
-                        Button(action: {
-                            isActionSheetPresented = true
-                        }) {
-                            if let image = image {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                            } else {
-                                Text("- Qui puoi inserire un'immagine del desiderio (opzionale)-")
-                                Image(systemName: "photo.circle.fill")
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                                    .foregroundColor(.gray)
-                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                isActionSheetPresented = true
+                            }) {
+                                if let image = image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                                } else {
+                                    Text("- Qui puoi inserire un'immagine-")
+                                    Image(systemName: "photo.circle.fill")
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                        .foregroundColor(.gray)
+                                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                                }
                             }
+                            .padding()
+                            Spacer()
                         }
-                        .padding()
                     }
                     
                     TextField("Cosa vuoi comprare?", text: $name)
