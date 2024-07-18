@@ -13,7 +13,7 @@ class QuizViewModel: ObservableObject {
             return
         }
 
-        // Retrieve the username based on the authenticated user's UID
+        // Recupera l'username basandosi sull'UID dell'user autenticato
         ref.child("usernames").child(user.uid).observeSingleEvent(of: .value) { snapshot in
             if let usernameDict = snapshot.value as? [String: Any],
                let username = usernameDict["name"] as? String {
