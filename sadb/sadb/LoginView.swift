@@ -7,6 +7,7 @@ struct LoginView: View {
     @State private var alertMessage = ""
     
     @AppStorage("isLogged") private var isLogged = false
+    @AppStorage("e_mail") private var e_mail : String = ""
     
     @StateObject var authModel = AuthModel()
     
@@ -46,6 +47,7 @@ struct LoginView: View {
                             // Handle successful login
                             print("Login successful for user: \(authDataResult.user.email ?? "")")
                             isLogged = true // Set isLogged to true
+                            e_mail = email
                         case .failure(let error):
                             // Handle login error
                             print("Login failed with error: \(error.localizedDescription)")

@@ -7,6 +7,7 @@ struct RegistrationView: View {
     @State private var email: String = ""
     @State private var username: String = ""
     @State private var password: String = ""
+    @State private var confirmPassword: String = ""
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var alertTitle = ""
@@ -24,7 +25,7 @@ struct RegistrationView: View {
                     Text("Registrazione")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 20)
                     
                     VStack(alignment: .leading) {
                         Text("Nome")
@@ -66,27 +67,46 @@ struct RegistrationView: View {
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(5.0)
                             .padding(.bottom, 20)
+                        
+                        Text("Conferma Password")
+                                .font(.headline)
+                            SecureField("Conferma password", text: $confirmPassword)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(5.0)
+                                .padding(.bottom, 20)
                     }
                     .padding(.horizontal, 40)
                     
                     Button(action: {
-                        authModel.pushNewValue(username: username, email: email, password: password) { error in
+                        if name.isEmpty || lastName.isEmpty || email.isEmpty || username.isEmpty || password.isEmpty {
+                                alertTitle = "Campi Vuoti"
+                                alertMessage = "Per favore, riempi tutti i campi."
+                                showingAlert = true
+                        } else if !isValidEmail(email: email){
+                            alertTitle = "Email non valida"
+                            alertMessage = "Per favore inserisci un'email valida."
+                            showingAlert = true
+                        }else if password != confirmPassword {
+                            alertTitle = "Password non corrispondenti"
+                            alertMessage = "Le password non corrispondono. Per favore, riprova."
+                            showingAlert = true
+                        } else {
+                            authModel.pushNewValue(username: username, email: email, password: password) { error in
                                 if let error = error {
-                                    // Handle the error
                                     print("Operation failed with error: \(error.localizedDescription)")
-                                    // You can also show an alert or update the UI to reflect the error
                                 } else {
-                                    // Handle the success
                                     print("Operation successful!")
-                                    // You can also navigate to another view or update the UI to reflect success
+                                    hasRegistered = true
                                 }
                             }
+                        }
                         }){
                         Text("Registrati")
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue)
+                            .background(Color.green)
                             .cornerRadius(10)
                     }
                     .padding(.horizontal, 40)
@@ -97,14 +117,20 @@ struct RegistrationView: View {
                     
                     NavigationLink(destination: LoginView()) {
                         Text("Hai già un account? Accedi")
-                            .foregroundColor(.blue)
-                            .padding(.top, 20)
+                            .foregroundColor(.green)
+                            .padding(.top, 10)
                     }
                     
                     Spacer()
                 }
             }
         }
+    }
+    
+    func isValidEmail(email: String)-> Bool{
+        let emailRegEx = "(?i)[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
 }
 

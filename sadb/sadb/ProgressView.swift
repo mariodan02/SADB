@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ProgressView: View {
+    
+    @AppStorage("e_mail") private var e_mail : String = ""
+    
     @State private var cigarettesPerDay: Double = 0
     @State private var packCost: Double = 0
     @State private var cigarettesSmokedDiary: Double = 0
@@ -17,8 +20,10 @@ struct ProgressView: View {
     }
     
     var body: some View {
+        
         NavigationStack {
             VStack {
+                Text("Ciao, \(e_mail)")
                 // Denaro risparmiato e giorni senza fumare
                 HStack {
                     VStack {
