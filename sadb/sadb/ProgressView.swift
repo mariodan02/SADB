@@ -97,19 +97,22 @@ struct ProgressView: View {
                 
                 Spacer()
             }
+            }
             .background(Color.green.opacity(0.1))
             .navigationTitle("Progressi")
-            .navigationBarTitleDisplayMode(.large)
-        }
+            
         }
         .onAppear {
-            viewModel.fetchQuizData { (fetchedPackCost, fetchedCigarettesPerDay) in
+            viewModel.fetchQuizData { (fetchedCigarettesPerDay, fetchedPackCost) in
+                print("Fetched PackCost: \(String(describing: fetchedPackCost)), Fetched CigarettesPerDay: \(String(describing: fetchedCigarettesPerDay))")
                 self.packCost = fetchedPackCost
                 self.cigarettesPerDay = fetchedCigarettesPerDay
-                fetchSmokingDiary()
-                self.daysWithoutSmoking = calculateDaysWithoutSmoking()
+                self.fetchSmokingDiary()
+                self.daysWithoutSmoking = self.calculateDaysWithoutSmoking()
+                print("PackCost after assignment: \(String(describing: self.packCost)), CigarettesPerDay after assignment: \(String(describing: self.cigarettesPerDay))")
             }
         }
+
     }
     
     private func calculateMoneySaved() -> Double {
@@ -123,27 +126,17 @@ struct ProgressView: View {
         let dailySavings = dailyCostInitial - dailyCostCurrent
         let totalSaved = dailySavings * Double(daysWithoutSmoking)
         
-        
-        //per provare il metodo
-//        let cigarettesPerPack = 20.0
-//        let dailyCostInitial = (20 / cigarettesPerPack) * 5
-//        let dailyCostCurrent = (10 / cigarettesPerPack) * 5
-//        let dailySavings = dailyCostInitial - dailyCostCurrent
-//        let totalSaved = dailySavings * Double(10)
-        
         return totalSaved
     }
     
-    //esempio di metodo che serve per provare i giorni senza fumare
-    //sostituire con il metodo per prendere giorno-sigarette fumate dal db
     private func fetchSmokingDiary() {
-           self.smokingDiary = [
-               SmokingRecord(date: Date(), cigarettesSmoked: 0),
-               SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, cigarettesSmoked: 0),
-               SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, cigarettesSmoked: 5),
-               SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, cigarettesSmoked: 0)
-           ]
-       }
+        self.smokingDiary = [
+            SmokingRecord(date: Date(), cigarettesSmoked: 0),
+            SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, cigarettesSmoked: 0),
+            SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, cigarettesSmoked: 5),
+            SmokingRecord(date: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, cigarettesSmoked: 0)
+        ]
+    }
     
     private func calculateDaysWithoutSmoking() -> Int {
         var maxStreak = 0
@@ -162,11 +155,6 @@ struct ProgressView: View {
         
         return maxStreak
     }
-    
-    private func calculateTotalDaysWithoutSmoking() -> Int {
-            return smokingDiary.filter { $0.cigarettesSmoked == 0 }.count
-        }
-
 }
 
 struct SmokingRecord {
@@ -217,5 +205,6 @@ struct ProgressView_Previews: PreviewProvider {
         ProgressView()
     }
 }
+
 
 

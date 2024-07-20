@@ -61,19 +61,21 @@ struct QuizView: View {
                 VStack(alignment: .leading) {
                     Text("Perché vuoi smettere di fumare?")
                         .padding(5)
-                    TextField("", text: $reasonToQuit)
-                        .padding()
-                        .frame(height: 200)
-                        .overlay(RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .padding(10)
+                    TextEditor(text: $reasonToQuit)
+                            .frame(height: 200)
+                            .multilineTextAlignment(.leading)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .padding(10)
                 }
                 
                 Button(action: {
                     if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
-                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                        quizCompleted = true
+                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit) {
+                            quizCompleted = true
+                        }
                     } else {
                         showAlert = true
                     }
@@ -96,8 +98,9 @@ struct QuizView: View {
                 Spacer()
             }
             .padding()
-            .navigationBarBackButtonHidden() // Hide the back button
         }
+        .navigationBarBackButtonHidden() // Nasconde il pulsante "indietro"
+        
     }
 }
 

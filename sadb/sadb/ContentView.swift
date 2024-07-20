@@ -1,9 +1,3 @@
-//
-//  ContentView.swift
-//  sadb
-//
-//  Created by Studente on 02/07/24.
-//
 
 import SwiftUI
 
@@ -26,6 +20,7 @@ struct ContentView: View {
                 }
         }
         .accentColor(.green)
+        .navigationBarBackButtonHidden()
     }
 }
 

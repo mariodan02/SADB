@@ -148,6 +148,7 @@ struct RegistrationView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     func isValidEmail(email: String) -> Bool {
