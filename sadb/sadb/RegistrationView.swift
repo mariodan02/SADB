@@ -13,11 +13,11 @@ struct RegistrationView: View {
     @State private var alertTitle = ""
     
     //@AppStorage("hasRegistered") private var hasRegistered = false
-    
+    @AppStorage("isLogged") private var isLogged: Bool = false
     @StateObject var authModel = AuthModel()
     
     // New state for navigation
-    @State private var navigateToQuiz = false
+    @AppStorage("navigateToQuiz") private var navigateToQuiz = false
     
     var body: some View {
         NavigationView {
@@ -38,6 +38,7 @@ struct RegistrationView: View {
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(5.0)
                             .padding(.bottom, 20)
+                            .disableAutocorrection(true)
                         
                         Text("Cognome")
                             .font(.headline)
@@ -46,6 +47,7 @@ struct RegistrationView: View {
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(5.0)
                             .padding(.bottom, 20)
+                            .disableAutocorrection(true)
                         
                         Text("E-mail")
                             .font(.headline)
@@ -55,6 +57,7 @@ struct RegistrationView: View {
                             .cornerRadius(5.0)
                             .padding(.bottom, 20)
                             .autocapitalization(.none)
+                            .disableAutocorrection(true)
                         
                         Text("Username")
                             .font(.headline)
@@ -64,6 +67,7 @@ struct RegistrationView: View {
                             .cornerRadius(5.0)
                             .padding(.bottom, 20)
                             .autocapitalization(.none)
+                            .disableAutocorrection(true)
                         
                         Text("Password")
                             .font(.headline)
@@ -117,6 +121,7 @@ struct RegistrationView: View {
                                     print("Operation successful!")
                                     //hasRegistered = true
                                     navigateToQuiz = true
+                                    isLogged = true
                                 }
                             }
                         }
@@ -148,7 +153,7 @@ struct RegistrationView: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden()
     }
     
     func isValidEmail(email: String) -> Bool {

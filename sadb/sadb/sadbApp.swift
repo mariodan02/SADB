@@ -1,10 +1,3 @@
-//
-//  sadbApp.swift
-//  sadb
-//
-//  Created by Studente on 02/07/24.
-//
-
 import SwiftUI
 import FirebaseCore
 
@@ -16,12 +9,15 @@ struct sadbApp: App {
     //@AppStorage("hasCompletedQuiz") private var hasCompletedQuiz: Bool = false
     //@AppStorage("hasRegistered") private var hasRegistered: Bool = false
     @AppStorage("isLogged") private var isLogged: Bool = false
+    @AppStorage("navigateToQuiz") private var navigateToQuiz = false
     
     var body: some Scene {
         WindowGroup {
             
             if (!isLogged){
                 LoginView()
+            } else if (isLogged && navigateToQuiz){
+                QuizView()
             } else {
                 ContentView()
             }
@@ -37,4 +33,3 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     return true
   }
 }
-

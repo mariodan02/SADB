@@ -9,6 +9,8 @@ struct QuizView: View {
     @State private var showAlert: Bool = false
     @State private var quizCompleted: Bool = false
     
+    @AppStorage("navigateToQuiz") private var navigateToQuiz = false
+    
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -73,8 +75,9 @@ struct QuizView: View {
                 
                 Button(action: {
                     if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
-                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit) {
+                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit){
                             quizCompleted = true
+                            navigateToQuiz = false
                         }
                     } else {
                         showAlert = true
@@ -95,11 +98,12 @@ struct QuizView: View {
                     EmptyView()
                 }
                 
+                
                 Spacer()
             }
             .padding()
         }
-        .navigationBarBackButtonHidden() // Nasconde il pulsante "indietro"
+        .navigationBarBackButtonHidden() // Hide the back button
         
     }
 }
@@ -109,4 +113,3 @@ struct QuizView_Previews: PreviewProvider {
         QuizView()
     }
 }
-
