@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAuth
 
 struct WishItem: Identifiable {
     let id = UUID()
@@ -10,17 +11,15 @@ struct WishItem: Identifiable {
 }
 
 struct WishListView: View {
-    @State private var wishList = [WishItem]() // Empty initial list
+    @StateObject private var wishModel = WishListViewModel() // Initialize the ViewModel
     @State private var isPresentingAddWishItem = false
-    
-    var packCost: Double?
     
     var body: some View {
         ZStack {
             Color.green.opacity(0.1).edgesIgnoringSafeArea(.all)
             
             VStack {
-                if wishList.isEmpty {
+                if wishModel.wishList.isEmpty {
                     Spacer()
                     Text("Ancora non hai inserito nessun desiderio")
                         .font(.title2)
@@ -30,7 +29,7 @@ struct WishListView: View {
                     Spacer()
                 } else {
                     List {
-                        ForEach(wishList) { item in
+                        ForEach(wishModel.wishList) { item in
                             HStack {
                                 item.image
                                     .resizable()
@@ -63,20 +62,29 @@ struct WishListView: View {
                     .foregroundColor(.green)
             })
             .sheet(isPresented: $isPresentingAddWishItem) {
-                AddWishItemView(wishList: $wishList, packCost: packCost)
+                AddWishItemView(wishModel: wishModel, packCost: wishModel.packCost)
             }
         }
         .navigationBarTitle("Wishlist")
+        
     }
     
     private func deleteItems(at offsets: IndexSet) {
-        wishList.remove(atOffsets: offsets)
+        // Remove items from both the list and database
+        offsets.forEach { index in
+            let itemToDelete = wishModel.wishList[index]
+            wishModel.ref.child("usernames").child(Auth.auth().currentUser!.uid).child("wishList").child(itemToDelete.name).removeValue()
+        }
+        
+        wishModel.wishList.remove(atOffsets: offsets)
     }
 }
 
+
+
 struct AddWishItemView: View {
     @Environment(\.presentationMode) var presentationMode
-    @Binding var wishList: [WishItem]
+    @ObservedObject var wishModel: WishListViewModel
     
     @State private var name = ""
     @State private var cost = ""
@@ -84,16 +92,17 @@ struct AddWishItemView: View {
     @State private var isImagePickerPresented = false
     @State private var isActionSheetPresented = false
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var costDouble: Double = 0.0
     @State private var showAlert = false
-    @State private var showNameAlert = false // New state for name validation alert
+    @State private var showNameAlert = false
     var packCost: Double?
-
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     VStack {
-                        HStack{
+                        HStack {
                             Spacer()
                             Button(action: {
                                 isActionSheetPresented = true
@@ -122,6 +131,13 @@ struct AddWishItemView: View {
                     
                     TextField("Prezzo (in euro)", text: $cost)
                         .keyboardType(.decimalPad)
+                        .onChange(of: cost) { newValue in
+                            if let doubleValue = Double(newValue) {
+                                costDouble = doubleValue
+                            } else {
+                                costDouble = 0.0
+                            }
+                        }
                 }
                 
                 Button(action: {
@@ -130,7 +146,14 @@ struct AddWishItemView: View {
                         return
                     }
                     
-                    guard let costValue = Double(cost), let packCostValue = packCost else { return }
+                    wishModel.pushNewValue(wishName: name, wishCost: costDouble)
+                    
+                    /*
+                    guard let costValue = Double(cost), let packCostValue = packCost else {
+                        showAlert = true
+                        return
+                    }
+                    
                     let equivalentPacks = Int(costValue / packCostValue)
                     let equivalentText = "\(equivalentPacks) pacchetti di sigarette"
                     let newItem = WishItem(
@@ -140,7 +163,10 @@ struct AddWishItemView: View {
                         isActive: true,
                         image: image != nil ? Image(uiImage: image!) : Image("gift")
                     )
-                    wishList.append(newItem)
+                    
+                    wishModel.wishList.append(newItem)
+                    */
+                    wishModel.loadWishes() // Reload wishes after adding new item
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Aggiungi")
@@ -169,7 +195,7 @@ struct AddWishItemView: View {
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Errore"),
-                    message: Text("Inserisci un numero valido per il prezzo"),
+                    message: Text("Impossibile calcolare i pacchetti di sigarette. Assicurati che il costo del pacchetto sia impostato."),
                     dismissButton: .default(Text("OK"))
                 )
             }
@@ -184,6 +210,9 @@ struct AddWishItemView: View {
         .foregroundColor(.green)
     }
 }
+
+
+
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
@@ -225,3 +254,4 @@ struct ImagePicker: UIViewControllerRepresentable {
 #Preview {
     WishListView()
 }
+

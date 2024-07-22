@@ -115,7 +115,7 @@ struct ProgressView: View {
                                 .cornerRadius(10)
                         }
                         
-                        NavigationLink(destination: WishListView(packCost: packCost)) {
+                        NavigationLink(destination: WishListView()) {
                             Text("Wishlist")
                                 .foregroundColor(.black)
                                 .frame(maxWidth: 200)

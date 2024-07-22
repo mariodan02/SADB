@@ -13,7 +13,7 @@ struct RegistrationView: View {
     @State private var alertTitle = ""
     
     //@AppStorage("hasRegistered") private var hasRegistered = false
-    // @AppStorage("isLogged") private var isLogged: Bool = false
+    @AppStorage("isLogged") private var isLogged: Bool = false
     @StateObject var authModel = AuthModel()
     
     // New state for navigation
@@ -121,7 +121,7 @@ struct RegistrationView: View {
                                     print("Operation successful!")
                                     //hasRegistered = true
                                     navigateToQuiz = true
-                            //        isLogged = true
+                                    isLogged = true
                                 }
                             }
                         }

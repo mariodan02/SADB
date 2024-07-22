@@ -15,10 +15,12 @@ struct sadbApp: App {
         WindowGroup {
             
             if (!isLogged){
-                LoginView()
-            } else {
-                QuizView()
-            }
+                            LoginView()
+                        } else if (isLogged && navigateToQuiz){
+                            QuizView()
+                        } else {
+                            ContentView()
+                        }
 
         }
     }

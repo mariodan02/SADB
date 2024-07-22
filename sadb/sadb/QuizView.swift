@@ -22,7 +22,7 @@ struct QuizView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView{
+            VStack(alignment: .leading, spacing: 20) {
                 HStack {
                     Spacer()
                     Text("Parlaci di te")
@@ -76,7 +76,9 @@ struct QuizView: View {
                 Button(action: {
                     if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
                         viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                        quizCompleted = true
+                            quizCompleted = true
+                            navigateToQuiz = false
+                        
                     } else {
                         showAlert = true
                     }
