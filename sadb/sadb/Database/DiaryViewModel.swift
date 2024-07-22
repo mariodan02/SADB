@@ -37,4 +37,26 @@ class DiaryViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchLastSmokingDate(completion: @escaping (Date?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            completion(nil)
+            return
+        }
+        ref.child("usernames").child(user.uid).child("diaryData").observeSingleEvent(of: .value) { snapshot in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            var latestDate: Date? = nil
+            
+            if let diaryData = snapshot.value as? [String: Any] {
+                for (dateString, _) in diaryData {
+                    if let date = dateFormatter.date(from: dateString), (latestDate == nil || date > latestDate!) {
+                        latestDate = date
+                    }
+                }
+            }
+            completion(latestDate)
+        }
+    }
 }
