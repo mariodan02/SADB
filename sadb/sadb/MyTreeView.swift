@@ -1,28 +1,19 @@
-//
-//  myTreeView.swift
-//  sadb
-//
-//  Created by Studente on 05/07/24.
-//
-
 import SwiftUI
+import SpriteKit
 
 struct MyTreeView: View {
+    var scene: SKScene {
+        let scene = SKScene(fileNamed: "GameScene")
+        scene!.size = CGSize(width: 750, height: 1334) 
+        scene?.scaleMode = .aspectFit
+        return scene!
+    }
+    
+    
     var body: some View {
-        NavigationView{
-            ZStack {
-                Image("sfondo") .aspectRatio(contentMode: .fit)
-                            
-                Image("albero_vuoto")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-                    .offset(y:50)
-            }
-            .navigationTitle("Il mio albero")
-            .navigationBarTitleDisplayMode(.large)
-            .scrollContentBackground(.hidden)
-            .padding(.bottom, 200)
-        }
+        SpriteView(scene: scene)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.clear)
     }
 }
 

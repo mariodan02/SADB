@@ -56,21 +56,21 @@ struct LinkPreview: View {
                 AsyncImage(url: imageUrl) { image in
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200, height: 200)
+                        .aspectRatio(contentMode: .fill)
                         .cornerRadius(10)
                 } placeholder: {
-                    ProgressView()
-                        .frame(width: 50, height: 50)
+                    Spacer()
                 }
             }
             Text(title)
                 .font(.headline)
-                .padding(.top, 10) // Aggiungi un po' di spazio tra l'immagine e il titolo
+                .padding(.top, 10)
+                .foregroundColor(.black)
                 .onAppear {
                     fetchMetadata(for: article.url)
                 }
         }
+        .frame(width: UIScreen.main.bounds.width - 80)
     }
     
     private func fetchMetadata(for url: URL) {
@@ -121,9 +121,11 @@ struct SafariViewControllerWrapper: UIViewControllerRepresentable {
 }
 
 #Preview {
-    BenefitView(organ: .constant(Organ(name: "Polmoni", image: "polmoni", articles: [
-        Article(title: "Articolo 1", url: URL(string: "https://www.sbmedical.it/blog/smettere-di-fumare-puo-salvare-il-cuore-ecco-perche/")!),
-        Article(title: "Articolo 2", url: URL(string: "https://example.com/article2")!),
-        Article(title: "Articolo 3", url: URL(string: "https://example.com/article3")!)
+    BenefitView(organ: .constant(Organ(name: "Cuore", image: "cuore", articles: [
+        Article(title: "Smettere di fumare può salvare il cuore: ecco perché ", url: URL(string: "https://www.sbmedical.it/blog/smettere-di-fumare-puo-salvare-il-cuore-ecco-perche/")!),
+        Article(title: "Smettere di fumare", url: URL(string: "https://swissheart.ch/it/mantensersi-sani/una-vita-sana/smettere-di-fumare")!),
+        Article(title: "Tabacco e cuore", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/angina-pectoris/")!),
+        Article(title: "Tabagismo e rischio di infarto cardiaco", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/infarto/")!),
+        Article(title: "Ipertensione arteriosa e tabagismo", url: URL(string: "https://www.stop-tabacco.ch/salute/malattie-cardiovascolari/ipertensione-arteriosa/")!)
     ])))
 }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1F37D3192C47DF20006DB2D0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1F37D3182C47DF20006DB2D0 /* FirebaseAuth */; };
+		1F4396C32C4E5CFC0034C7F5 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4396C12C4E5CFC0034C7F5 /* GameScene.swift */; };
+		1F4396C42C4E5CFC0034C7F5 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1F4396C22C4E5CFC0034C7F5 /* GameScene.sks */; };
 		1F46E06D2C491B6500988C19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F46E06C2C491B6500988C19 /* GoogleService-Info.plist */; };
 		1F46E06F2C492B3D00988C19 /* DiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */; };
 		1F588D342C344AC300879952 /* sadbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F588D332C344AC300879952 /* sadbApp.swift */; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F4396C12C4E5CFC0034C7F5 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		1F4396C22C4E5CFC0034C7F5 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		1F46E06C2C491B6500988C19 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewModel.swift; sourceTree = "<group>"; };
 		1F588D302C344AC300879952 /* sadb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sadb.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +136,8 @@
 		1F588D322C344AC300879952 /* sadb */ = {
 			isa = PBXGroup;
 			children = (
+				1F4396C22C4E5CFC0034C7F5 /* GameScene.sks */,
+				1F4396C12C4E5CFC0034C7F5 /* GameScene.swift */,
 				1F588D332C344AC300879952 /* sadbApp.swift */,
 				1F588D352C344AC300879952 /* ContentView.swift */,
 				1F588D372C344AC500879952 /* Assets.xcassets */,
@@ -301,6 +307,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F4396C42C4E5CFC0034C7F5 /* GameScene.sks in Resources */,
 				1F588D3B2C344AC500879952 /* Preview Assets.xcassets in Resources */,
 				1F588D382C344AC500879952 /* Assets.xcassets in Resources */,
 				1F46E06D2C491B6500988C19 /* GoogleService-Info.plist in Resources */,
@@ -330,6 +337,7 @@
 			files = (
 				1FC7393D2C3828580049EB44 /* WishListView.swift in Sources */,
 				1F588D362C344AC300879952 /* ContentView.swift in Sources */,
+				1F4396C32C4E5CFC0034C7F5 /* GameScene.swift in Sources */,
 				1FC7393F2C3828660049EB44 /* MyTreeView.swift in Sources */,
 				1F46E06F2C492B3D00988C19 /* DiaryViewModel.swift in Sources */,
 				1FE89D192C456BCF00420385 /* RegistrationView.swift in Sources */,
