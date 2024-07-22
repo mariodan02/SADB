@@ -9,36 +9,38 @@ struct DiaryView: View {
     @StateObject private var diaryModel = DiaryViewModel()
     
     var body: some View {
-        VStack {
-            // Top header
-            HStack {
-                Spacer()
-                Text("Il mio diario")
-                    .font(.title)
-                    .fontWeight(.bold)
-                Spacer()
-            }
-            
-            // Month Navigation
-            HStack {
-                Button(action: {
-                    selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? Date()
-                }) {
-                    Image(systemName: "chevron.left")
+        
+        ScrollView{
+            VStack {
+                // Top header
+                HStack {
+                    Spacer()
+                    Text("Il mio diario")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Spacer()
                 }
-                Spacer()
-                Text(monthYearString(from: selectedDate))
-                    .font(.title2)
-                    .fontWeight(.bold)
-                Spacer()
-                Button(action: {
-                    selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? Date()
-                }) {
-                    Image(systemName: "chevron.right")
+                
+                // Month Navigation
+                HStack {
+                    Button(action: {
+                        selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? Date()
+                    }) {
+                        Image(systemName: "chevron.left")
+                    }
+                    Spacer()
+                    Text(monthYearString(from: selectedDate))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Spacer()
+                    Button(action: {
+                        selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? Date()
+                    }) {
+                        Image(systemName: "chevron.right")
+                    }
                 }
+                .padding(.horizontal, 20)
             }
-            .padding(.horizontal, 20)
-            
             // Calendar View
             CalendarView(selectedDate: $selectedDate, diaryEntries: $diaryEntries)
             

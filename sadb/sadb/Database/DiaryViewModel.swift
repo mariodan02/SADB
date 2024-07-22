@@ -13,10 +13,9 @@ class DiaryViewModel: ObservableObject {
             return
         }
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd" // Customize the format as needed
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateString = dateFormatter.string(from: currentDate)
 
-        // Recupera l'username basandosi sull'UID dell'user autenticato
         ref.child("usernames").child(user.uid).observeSingleEvent(of: .value) { snapshot in
             if let usernameDict = snapshot.value as? [String: Any],
                let username = usernameDict["name"] as? String {
@@ -24,12 +23,11 @@ class DiaryViewModel: ObservableObject {
                     dateString: cigSmokedToday
                 ]
 
-                // Update the diaryData under the username node
                 self.ref.child("usernames").child(user.uid).child("diaryData").updateChildValues(diaryData) { error, _ in
                     if let error = error {
-                        print("Error pushing quiz data: \(error.localizedDescription)")
+                        print("Error pushing diary data: \(error.localizedDescription)")
                     } else {
-                        print("Quiz data successfully pushed")
+                        print("Diary data successfully pushed")
                     }
                 }
             } else {
@@ -37,4 +35,49 @@ class DiaryViewModel: ObservableObject {
             }
         }
     }
+
+    func fetchLastSmokingDate(completion: @escaping (Date?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            completion(nil)
+            return
+        }
+        ref.child("usernames").child(user.uid).child("diaryData").observeSingleEvent(of: .value) { snapshot in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            var latestDate: Date? = nil
+            
+            if let diaryData = snapshot.value as? [String: Any] {
+                for (dateString, _) in diaryData {
+                    if let date = dateFormatter.date(from: dateString), (latestDate == nil || date > latestDate!) {
+                        latestDate = date
+                    }
+                }
+            }
+            completion(latestDate)
+        }
+    }
+
+    func fetchSmokingDiary(completion: @escaping ([SmokingRecord]) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            completion([])
+            return
+        }
+        ref.child("usernames").child(user.uid).child("diaryData").observeSingleEvent(of: .value) { snapshot in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            var records: [SmokingRecord] = []
+
+            if let diaryData = snapshot.value as? [String: Any] {
+                for (dateString, value) in diaryData {
+                    if let date = dateFormatter.date(from: dateString), let cigarettesSmoked = value as? Int {
+                        records.append(SmokingRecord(date: date, cigarettesSmoked: cigarettesSmoked))
+                    }
+                }
+            }
+            completion(records)
+        }
+    }
+
 }
