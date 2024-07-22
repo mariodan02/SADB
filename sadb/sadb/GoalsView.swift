@@ -7,10 +7,9 @@ struct GoalsView: View {
     ]
     
     var moneySaved: Double
-    var daysWithoutSmoking: Int //da cambiare la logica 
+    var daysWithoutSmoking: Int
     
     var body: some View {
-        // Definiamo gli obiettivi come tuple di (imageName, subtitle, achieved)
         let goals: [(String, String, Bool)] = [
             ("1.circle", "Non ho fumato per 1 giorno", daysWithoutSmoking>=1),
             ("2.circle", "Non ho fumato per 2 giorni", daysWithoutSmoking>=2),
@@ -39,18 +38,15 @@ struct GoalsView: View {
             ("eurosign.circle", "Ho risparmiato €200", moneySaved >= 200),
         ]
         
-        // Filtriamo gli obiettivi raggiunti e non raggiunti
         let achievedGoals = goals.filter { $0.2 }
         let unachievedGoals = goals.filter { !$0.2 }
         
         VStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    // Visualizziamo prima gli obiettivi raggiunti
                     ForEach(achievedGoals, id: \.1) { goal in
                         GoalItem(imageName: goal.0, subtitle: goal.1, achieved: goal.2)
                     }
-                    // Visualizziamo poi gli obiettivi non raggiunti
                     ForEach(unachievedGoals, id: \.1) { goal in
                         GoalItem(imageName: goal.0, subtitle: goal.1, achieved: goal.2)
                     }
@@ -87,8 +83,4 @@ struct GoalItem: View {
         .cornerRadius(10)
         .shadow(radius: 5)
     }
-}
-
-#Preview {
-    GoalsView(moneySaved: 20, daysWithoutSmoking: 5)
 }
