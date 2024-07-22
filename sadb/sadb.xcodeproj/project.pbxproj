@@ -25,7 +25,7 @@
 		1FC739392C3828070049EB44 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739382C3828070049EB44 /* ProgressView.swift */; };
 		1FC7393B2C38283F0049EB44 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7393A2C38283F0049EB44 /* QuizView.swift */; };
 		1FC7393D2C3828580049EB44 /* WishListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7393C2C3828580049EB44 /* WishListView.swift */; };
-		1FC7393F2C3828660049EB44 /* MyTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7393E2C3828660049EB44 /* MyTreeView.swift */; };
+		1FC7393F2C3828660049EB44 /* MountainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7393E2C3828660049EB44 /* MountainView.swift */; };
 		1FC739412C3828770049EB44 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739402C3828770049EB44 /* HealthView.swift */; };
 		1FC739432C3828850049EB44 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739422C3828850049EB44 /* GoalsView.swift */; };
 		1FC739452C3828910049EB44 /* DiaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739442C3828910049EB44 /* DiaryView.swift */; };
@@ -73,7 +73,7 @@
 		1FC739382C3828070049EB44 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		1FC7393A2C38283F0049EB44 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 		1FC7393C2C3828580049EB44 /* WishListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListView.swift; sourceTree = "<group>"; };
-		1FC7393E2C3828660049EB44 /* MyTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTreeView.swift; sourceTree = "<group>"; };
+		1FC7393E2C3828660049EB44 /* MountainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MountainView.swift; sourceTree = "<group>"; };
 		1FC739402C3828770049EB44 /* HealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
 		1FC739422C3828850049EB44 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		1FC739442C3828910049EB44 /* DiaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryView.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 				1FC739422C3828850049EB44 /* GoalsView.swift */,
 				1FC739402C3828770049EB44 /* HealthView.swift */,
 				1FE89D112C45074900420385 /* BenefitView.swift */,
-				1FC7393E2C3828660049EB44 /* MyTreeView.swift */,
+				1FC7393E2C3828660049EB44 /* MountainView.swift */,
 				1FC739382C3828070049EB44 /* ProgressView.swift */,
 				1FC7393A2C38283F0049EB44 /* QuizView.swift */,
 				1FC7393C2C3828580049EB44 /* WishListView.swift */,
@@ -338,7 +338,7 @@
 				1FC7393D2C3828580049EB44 /* WishListView.swift in Sources */,
 				1F588D362C344AC300879952 /* ContentView.swift in Sources */,
 				1F4396C32C4E5CFC0034C7F5 /* GameScene.swift in Sources */,
-				1FC7393F2C3828660049EB44 /* MyTreeView.swift in Sources */,
+				1FC7393F2C3828660049EB44 /* MountainView.swift in Sources */,
 				1F46E06F2C492B3D00988C19 /* DiaryViewModel.swift in Sources */,
 				1FE89D192C456BCF00420385 /* RegistrationView.swift in Sources */,
 				1FC739432C3828850049EB44 /* GoalsView.swift in Sources */,
