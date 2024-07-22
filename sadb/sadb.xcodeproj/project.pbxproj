@@ -21,6 +21,7 @@
 		1F588D512C344AC500879952 /* sadbUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F588D502C344AC500879952 /* sadbUITestsLaunchTests.swift */; };
 		1F95DF202C45556D00C62A39 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 1F95DF1F2C45556D00C62A39 /* FirebaseAnalytics */; };
 		1F95DF222C45556D00C62A39 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1F95DF212C45556D00C62A39 /* FirebaseAnalyticsSwift */; };
+		1FA288C82C4EA68000D0E421 /* WishListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA288C72C4EA68000D0E421 /* WishListViewModel.swift */; };
 		1FC006A02C45691B00CB34D4 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0069E2C45691900CB34D4 /* AuthModel.swift */; };
 		1FC739392C3828070049EB44 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC739382C3828070049EB44 /* ProgressView.swift */; };
 		1FC7393B2C38283F0049EB44 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7393A2C38283F0049EB44 /* QuizView.swift */; };
@@ -69,6 +70,7 @@
 		1F588D4A2C344AC500879952 /* sadbUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sadbUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F588D4E2C344AC500879952 /* sadbUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sadbUITests.swift; sourceTree = "<group>"; };
 		1F588D502C344AC500879952 /* sadbUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sadbUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1FA288C72C4EA68000D0E421 /* WishListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WishListViewModel.swift; path = ../WishListViewModel.swift; sourceTree = "<group>"; };
 		1FC0069E2C45691900CB34D4 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
 		1FC739382C3828070049EB44 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		1FC7393A2C38283F0049EB44 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		1FC0069D2C4568CD00CB34D4 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				1FA288C72C4EA68000D0E421 /* WishListViewModel.swift */,
 				1FC88C4E2C4566EE009FDA60 /* QuizViewModel.swift */,
 				1FC0069E2C45691900CB34D4 /* AuthModel.swift */,
 				1F46E06E2C492B3D00988C19 /* DiaryViewModel.swift */,
@@ -349,6 +352,7 @@
 				1F588D342C344AC300879952 /* sadbApp.swift in Sources */,
 				1FC739392C3828070049EB44 /* ProgressView.swift in Sources */,
 				1FE89D172C456B2A00420385 /* LoginView.swift in Sources */,
+				1FA288C82C4EA68000D0E421 /* WishListViewModel.swift in Sources */,
 				1FC739412C3828770049EB44 /* HealthView.swift in Sources */,
 				1FC739452C3828910049EB44 /* DiaryView.swift in Sources */,
 			);
