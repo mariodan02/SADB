@@ -8,33 +8,34 @@ class DiaryViewModel: ObservableObject {
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
 
     func pushNewValue(currentDate: Date, cigSmokedToday: Int) {
-        guard let user = Auth.auth().currentUser else {
-            print("User not authenticated")
-            return
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let dateString = dateFormatter.string(from: currentDate)
+            guard let user = Auth.auth().currentUser else {
+                print("User not authenticated")
+                return
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd" // Customize the format as needed
+            let dateString = dateFormatter.string(from: currentDate)
 
-        ref.child("usernames").child(user.uid).observeSingleEvent(of: .value) { snapshot in
-            if let usernameDict = snapshot.value as? [String: Any],
-               let username = usernameDict["name"] as? String {
-                let diaryData = [
-                    dateString: cigSmokedToday
-                ]
-
-                self.ref.child("usernames").child(user.uid).child("diaryData").updateChildValues(diaryData) { error, _ in
+            // Recupera l'username basandosi sull'UID dell'user autenticato
+            ref.child("usernames").child(user.uid).child("diaryData").child(dateString).observeSingleEvent(of: .value) { snapshot in
+                var updatedCigSmokedToday = cigSmokedToday
+                
+                // Se esiste già una voce per questa data, somma i valori
+                if let existingValue = snapshot.value as? Int {
+                    updatedCigSmokedToday += existingValue
+                }
+                
+                // Aggiorna il valore nel database
+                self.ref.child("usernames").child(user.uid).child("diaryData").child(dateString).setValue(updatedCigSmokedToday) { error, _ in
                     if let error = error {
-                        print("Error pushing diary data: \(error.localizedDescription)")
+                        print("Error updating diary data: \(error.localizedDescription)")
                     } else {
-                        print("Diary data successfully pushed")
+                        print("Diary data successfully updated")
                     }
                 }
-            } else {
-                print("Username not found for the current user.")
             }
         }
-    }
 
     func fetchLastSmokingDate(completion: @escaping (Date?) -> Void) {
         guard let user = Auth.auth().currentUser else {

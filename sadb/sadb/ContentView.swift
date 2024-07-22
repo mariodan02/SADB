@@ -13,7 +13,7 @@ struct ContentView: View {
                             Label("Progressi", systemImage: "sparkles")
                         }
                     
-                    MyTreeView()
+                    MountainView()
                         .tabItem {
                             Label("Il mio albero", systemImage: "flag.fill")
                         }
