@@ -16,10 +16,8 @@ struct sadbApp: App {
             
             if (!isLogged){
                 LoginView()
-            } else if (isLogged && navigateToQuiz){
-                QuizView()
             } else {
-                ContentView()
+                QuizView()
             }
 
         }
