@@ -36,6 +36,7 @@ struct ProgressView: View {
     
     @AppStorage("e_mail") private var e_mail : String = ""
     @AppStorage("installationDate") private var installationDateString: String?
+    @AppStorage("cigarettesSmokedDiary") private var cigarettesSmokedDiary: Int = 0
     @StateObject private var authModel = AuthModel()
     @StateObject private var viewModel = QuizViewModel()
     @StateObject private var diaryModel = DiaryViewModel()
@@ -209,8 +210,8 @@ struct ProgressView: View {
         let totalSaved = dailyCost * Double(totalDays)
         
         // Calculate the cost of cigarettes smoked from the diary
-        let totalCigarettesSmoked = smokingDiary.reduce(0) { $0 + $1.cigarettesSmoked }
-        let totalCostSmoked = (Double(totalCigarettesSmoked) / 20) * packCost
+        let aCigCost = packCost / 20
+        let totalCostSmoked = Double(cigarettesSmokedDiary) * aCigCost
         
         return totalSaved - totalCostSmoked
     }
