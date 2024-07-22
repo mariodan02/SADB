@@ -15,16 +15,8 @@ struct CigaretteData: Identifiable {
 }
 
 struct WeeklyCigaretteChartView: View {
-    @State private var data: [CigaretteData] = [
-        CigaretteData(day: "Lunedì", cigarettes: 10),
-        CigaretteData(day: "Martedì", cigarettes: 12),
-        CigaretteData(day: "Mercoledì", cigarettes: 8),
-        CigaretteData(day: "Giovedì", cigarettes: 5),
-        CigaretteData(day: "Venerdì", cigarettes: 7),
-        CigaretteData(day: "Sabato", cigarettes: 14),
-        CigaretteData(day: "Domenica", cigarettes: 9)
-    ]
-    
+    var data: [CigaretteData]
+
     var body: some View {
         Chart(data) { item in
             BarMark(
@@ -53,6 +45,7 @@ struct ProgressView: View {
     @State private var daysWithoutSmoking: Int = 0
     @State private var smokingDiary: [SmokingRecord] = []
     @State private var lastSmokingDate: Date?
+    @State private var weeklySmokingData: [CigaretteData] = []
 
     var body: some View {
         NavigationStack {
@@ -99,11 +92,11 @@ struct ProgressView: View {
                         Text("Nell'ultima settimana...")
                             .font(.headline)
                             .padding(.top, 20)
-                        WeeklyCigaretteChartView()
+                        WeeklyCigaretteChartView(data: weeklySmokingData)
                             .frame(height: 300)
                     }
                     .padding([.top, .horizontal], 20)
-                    
+
                     // Bottoni
                     VStack(spacing: 15) {
                         NavigationLink(destination: GoalsView(moneySaved: calculateMoneySaved(), daysWithoutSmoking: daysWithoutSmoking)){
@@ -163,8 +156,37 @@ struct ProgressView: View {
                     }
                     self.daysWithoutSmoking = self.calculateDaysWithoutSmoking()
                 }
-                print("PackCost after assignment: \(String(describing: self.packCost)), CigarettesPerDay after assignment: \(String(describing: self.cigarettesPerDay))")
+                diaryModel.fetchSmokingDiary { diary in
+                    self.smokingDiary = diary
+                    print("PackCost after assignment: \(String(describing: self.packCost)), CigarettesPerDay after assignment: \(String(describing: self.cigarettesPerDay))")
+                }
             }
+            fetchWeeklySmokingData()
+        }
+    }
+    
+    private func fetchWeeklySmokingData() {
+        diaryModel.fetchSmokingDiary { records in
+            let calendar = Calendar.current
+            let today = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEEE" // To get day names
+
+            let lastSevenDays = (0..<7).map {
+                calendar.date(byAdding: .day, value: -$0, to: today)!
+            }
+            
+            let filteredRecords = records.filter { record in
+                lastSevenDays.contains { calendar.isDate(record.date, inSameDayAs: $0) }
+            }
+
+            var data: [CigaretteData] = []
+            for date in lastSevenDays {
+                let dayName = dateFormatter.string(from: date)
+                let cigarettesSmoked = filteredRecords.first { calendar.isDate($0.date, inSameDayAs: date) }?.cigarettesSmoked ?? 0
+                data.append(CigaretteData(day: dayName, cigarettes: cigarettesSmoked))
+            }
+            weeklySmokingData = data.reversed() // Reversing to show from earliest to latest
         }
     }
     
@@ -173,11 +195,24 @@ struct ProgressView: View {
             return 0.0
         }
         
-        let cigarettesPerPack = 20.0
-        let dailyCost = (cigarettesPerDay / cigarettesPerPack) * packCost
-        let totalSaved = dailyCost * Double(daysWithoutSmoking)
+        let dailyCost = (cigarettesPerDay * packCost) / 20
         
-        return totalSaved
+        // Calculate total days since installation
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let installationDateString = installationDateString, let installationDate = formatter.date(from: installationDateString) else {
+            return 0.0
+        }
+        let totalDays = Calendar.current.dateComponents([.day], from: installationDate, to: Date()).day ?? 0
+        
+        // Calculate total saved without smoking
+        let totalSaved = dailyCost * Double(totalDays)
+        
+        // Calculate the cost of cigarettes smoked from the diary
+        let totalCigarettesSmoked = smokingDiary.reduce(0) { $0 + $1.cigarettesSmoked }
+        let totalCostSmoked = (Double(totalCigarettesSmoked) / 20) * packCost
+        
+        return totalSaved - totalCostSmoked
     }
     
     private func calculateDaysWithoutSmoking() -> Int {
@@ -191,7 +226,15 @@ struct ProgressView: View {
 
 struct WeeklyCigaretteChartView_Previews: PreviewProvider {
     static var previews: some View {
-        WeeklyCigaretteChartView()
+        WeeklyCigaretteChartView(data: [
+            CigaretteData(day: "Lunedì", cigarettes: 10),
+            CigaretteData(day: "Martedì", cigarettes: 12),
+            CigaretteData(day: "Mercoledì", cigarettes: 8),
+            CigaretteData(day: "Giovedì", cigarettes: 5),
+            CigaretteData(day: "Venerdì", cigarettes: 7),
+            CigaretteData(day: "Sabato", cigarettes: 14),
+            CigaretteData(day: "Domenica", cigarettes: 9)
+        ])
     }
 }
 
