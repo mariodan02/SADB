@@ -9,8 +9,7 @@ struct DiaryView: View {
     @StateObject private var diaryModel = DiaryViewModel()
     
     var body: some View {
-        
-        ScrollView{
+        ScrollView {
             VStack {
                 // Top header
                 HStack {
@@ -40,91 +39,89 @@ struct DiaryView: View {
                     }
                 }
                 .padding(.horizontal, 20)
-            }
-            // Calendar View
-            CalendarView(selectedDate: $selectedDate, diaryEntries: $diaryEntries)
-            
-            // Display Diary Entries
-            ScrollView {
-                if let entries = diaryEntries[formattedDate(selectedDate)], !entries.isEmpty {
-                    ForEach(entries, id: \.self) { entry in
-                        VStack(alignment: .leading) {
-                            Text(entry)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .border(Color.gray, width: 1)
-                            
-                            HStack {
-                                Button(action: {
-                                    entryToEdit = entry
-                                    showingSheet = true
-                                }) {
-                                    Text("Modifica")
-                                        .foregroundColor(.blue)
-                                }
-                                .padding(.leading)
+                
+                // Calendar View
+                CalendarView(selectedDate: $selectedDate, diaryEntries: $diaryEntries)
+                
+                // Display Diary Entries
+                ScrollView {
+                    if let entries = diaryEntries[formattedDate(selectedDate)], !entries.isEmpty {
+                        ForEach(entries, id: \.self) { entry in
+                            VStack(alignment: .leading) {
+                                Text(entry)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .border(Color.gray, width: 1)
                                 
-                                Button(action: {
-                                    deleteEntry(entry)
-                                }) {
-                                    Text("Elimina")
-                                        .foregroundColor(.red)
+                                HStack {
+                                    Button(action: {
+                                        entryToEdit = entry
+                                        showingSheet = true
+                                    }) {
+                                        Text("Modifica")
+                                            .foregroundColor(.blue)
+                                    }
+                                    .padding(.leading)
+                                    
+                                    Button(action: {
+                                        deleteEntry(entry)
+                                    }) {
+                                        Text("Elimina")
+                                            .foregroundColor(.red)
+                                    }
+                                    .padding(.leading)
                                 }
-                                .padding(.leading)
                             }
                         }
-                    }
-                } else {
-                    Text("Nessuna annotazione per questo giorno.")
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .border(Color.gray, width: 1)
-                }
-            }
-            .frame(height: 250)
-            .padding(.horizontal, 20)
-            
-            // Total Cigarettes Smoked
-            Text("Totale sigarette fumate: \(cigarettesSmokedDiary)")
-                .font(.title2)
-                .padding(.vertical, 10)
-            
-            Button(action: {
-                entryToEdit = nil
-                showingSheet = true
-            }) {
-                Text("Aggiungi una nuova annotazione")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(isFutureDate(selectedDate) ? Color.gray : Color.green)
-                    .cornerRadius(10)
-            }
-            .padding([.horizontal, .bottom], 20)
-            .disabled(isFutureDate(selectedDate))
-            .sheet(isPresented: $showingSheet) {
-                DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes, date in
-                    if entryToEdit == nil {
-                        addEntry(newEntry, smoked, cigarettes)
                     } else {
-                        updateEntry(newEntry, smoked, cigarettes)
+                        Text("Nessuna annotazione per questo giorno.")
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .border(Color.gray, width: 1)
                     }
-                    saveDiaryEntries()
-                    showingSheet = false
-                }, selectedDate: selectedDate)
+                }
+                .frame(height: 250)
+                .padding(.horizontal, 20)
+                
+                // Total Cigarettes Smoked
+                Text("Totale sigarette fumate: \(cigarettesSmokedDiary)")
+                    .font(.title2)
+                    .padding(.vertical, 10)
+                
+                Button(action: {
+                    entryToEdit = nil
+                    showingSheet = true
+                }) {
+                    Text("Aggiungi una nuova annotazione")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isFutureDate(selectedDate) ? Color.gray : Color.green)
+                        .cornerRadius(10)
+                }
+                .padding([.horizontal, .bottom], 20)
+                .disabled(isFutureDate(selectedDate))
+                .sheet(isPresented: $showingSheet) {
+                    DiaryEntryView(entry: entryToEdit ?? "", saveAction: { newEntry, smoked, cigarettes, date in
+                        if entryToEdit == nil {
+                            addEntry(newEntry, smoked, cigarettes)
+                        } else {
+                            updateEntry(newEntry, smoked, cigarettes)
+                        }
+                        saveDiaryEntries()
+                        showingSheet = false
+                    }, selectedDate: selectedDate)
+                }
+                
             }
-                        
         }
         .background(Color.green.opacity(0.1))
         .onAppear {
             loadDiaryEntries()
         }
-        .tabItem {
-            Label("Diario", systemImage: "list.bullet")
-        }
-        .tag(0)
     }
     
+    // Formatting date functions
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -137,6 +134,7 @@ struct DiaryView: View {
         return formatter.string(from: date)
     }
     
+    // Load and save functions
     func saveDiaryEntries() {
         let data = try? JSONEncoder().encode(diaryEntries)
         UserDefaults.standard.setValue(data, forKey: "diaryEntries")
@@ -155,6 +153,7 @@ struct DiaryView: View {
         return date > Date()
     }
     
+    // Entry functions
     func addEntry(_ newEntry: String, _ smoked: Bool, _ cigarettes: String) {
         let dateKey = formattedDate(selectedDate)
         if diaryEntries[dateKey] == nil {
@@ -172,27 +171,36 @@ struct DiaryView: View {
     
     func updateEntry(_ updatedEntry: String, _ smoked: Bool, _ cigarettes: String) {
         let dateKey = formattedDate(selectedDate)
-        guard let entries = diaryEntries[dateKey] else { return }
-        if let index = entries.firstIndex(of: entryToEdit!) {
-            // Remove the old entry's cigarette count if it had one
-            if let oldEntryCigarettes = extractCigaretteCount(from: entries[index]) {
-                cigarettesSmokedDiary -= oldEntryCigarettes
-            }
-            
-            var fullEntry = updatedEntry
-            if smoked {
-                fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(cigarettes)"
-                cigarettesSmokedDiary += Int(cigarettes) ?? 0
+        guard let entries = diaryEntries[dateKey], let index = entries.firstIndex(of: entryToEdit!) else { return }
+
+        // Extract the old cigarette count and update the diary entries
+        if let oldEntryCigarettes = extractCigaretteCount(from: entries[index]) {
+            cigarettesSmokedDiary -= oldEntryCigarettes
+        }
+        
+        // Prepare the new entry
+        var fullEntry = updatedEntry
+        let newCigarettesSmoked = Int(cigarettes) ?? 0
+        if smoked {
+            fullEntry += "\nHai fumato oggi: Sì\nQuante sigarette: \(newCigarettesSmoked)"
+        } else {
+            fullEntry += "\nHai fumato oggi: No"
+        }
+
+        // Update the local entries and the total count
+        diaryEntries[dateKey]?[index] = fullEntry
+        cigarettesSmokedDiary += newCigarettesSmoked
+        
+        // Update the database with the new value
+        diaryModel.updateDiaryEntry(for: selectedDate, newCigarettesSmoked: newCigarettesSmoked) { success in
+            if success {
+                print("Entry successfully updated in database")
             } else {
-                fullEntry += "\nHai fumato oggi: No"
+                print("Failed to update entry in database")
             }
-            diaryEntries[dateKey]?[index] = fullEntry
-            // Aggiorniamo il database con i nuovi valori
-            diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: Int(cigarettes) ?? 0)
         }
     }
 
-    
     func deleteEntry(_ entry: String) {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
@@ -202,7 +210,7 @@ struct DiaryView: View {
             
             // Update local data
             diaryEntries[dateKey]?.remove(at: index)
-            if let _ = diaryEntries[dateKey], diaryEntries[dateKey]!.isEmpty {
+            if diaryEntries[dateKey]?.isEmpty == true {
                 diaryEntries.removeValue(forKey: dateKey)
             }
             
@@ -223,7 +231,6 @@ struct DiaryView: View {
         }
     }
 
-    
     func extractCigaretteCount(from entry: String) -> Int? {
         let pattern = "Quante sigarette: (\\d+)"
         if let range = entry.range(of: pattern, options: .regularExpression),
@@ -233,7 +240,6 @@ struct DiaryView: View {
         return nil
     }
 }
-
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false

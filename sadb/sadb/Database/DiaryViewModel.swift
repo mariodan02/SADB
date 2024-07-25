@@ -8,34 +8,24 @@ class DiaryViewModel: ObservableObject {
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
 
     func pushNewValue(currentDate: Date, cigSmokedToday: Int) {
-            guard let user = Auth.auth().currentUser else {
-                print("User not authenticated")
-                return
-            }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd" // Customize the format as needed
-            let dateString = dateFormatter.string(from: currentDate)
+        guard let user = Auth.auth().currentUser else {
+            print("User not authenticated")
+            return
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd" // Customize the format as needed
+        let dateString = dateFormatter.string(from: currentDate)
 
-            // Recupera l'username basandosi sull'UID dell'user autenticato
-            ref.child("usernames").child(user.uid).child("diaryData").child(dateString).observeSingleEvent(of: .value) { snapshot in
-                var updatedCigSmokedToday = cigSmokedToday
-                
-                // Se esiste già una voce per questa data, somma i valori
-                if let existingValue = snapshot.value as? Int {
-                    updatedCigSmokedToday += existingValue
-                }
-                
-                // Aggiorna il valore nel database
-                self.ref.child("usernames").child(user.uid).child("diaryData").child(dateString).setValue(updatedCigSmokedToday) { error, _ in
-                    if let error = error {
-                        print("Error updating diary data: \(error.localizedDescription)")
-                    } else {
-                        print("Diary data successfully updated")
-                    }
-                }
+        // Update the value in the database
+        ref.child("usernames").child(user.uid).child("diaryData").child(dateString).setValue(cigSmokedToday) { error, _ in
+            if let error = error {
+                print("Error updating diary data: \(error.localizedDescription)")
+            } else {
+                print("Diary data successfully updated")
             }
         }
+    }
 
     func fetchLastSmokingDate(completion: @escaping (Date?) -> Void) {
         guard let user = Auth.auth().currentUser else {
@@ -117,6 +107,35 @@ class DiaryViewModel: ObservableObject {
                         }
                     }
                 } else {
+                    completion(false)
+                }
+            }
+        }
+    
+    func updateDiaryEntry(for date: Date, newCigarettesSmoked: Int, completion: @escaping (Bool) -> Void) {
+            guard let user = Auth.auth().currentUser else {
+                print("User not authenticated")
+                completion(false)
+                return
+            }
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let dateString = dateFormatter.string(from: date)
+
+            ref.child("usernames").child(user.uid).child("diaryData").child(dateString).observeSingleEvent(of: .value) { snapshot in
+                if snapshot.exists() {
+                    self.ref.child("usernames").child(user.uid).child("diaryData").child(dateString).setValue(newCigarettesSmoked) { error, _ in
+                        if let error = error {
+                            print("Error updating diary entry: \(error.localizedDescription)")
+                            completion(false)
+                        } else {
+                            print("Diary entry successfully updated")
+                            completion(true)
+                        }
+                    }
+                } else {
+                    print("No entry exists for the specified date")
                     completion(false)
                 }
             }
