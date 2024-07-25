@@ -23,7 +23,7 @@ struct QuizView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 20) {
+            ScrollView{
                 HStack {
                     Spacer()
                     Text("Parlaci di te")
