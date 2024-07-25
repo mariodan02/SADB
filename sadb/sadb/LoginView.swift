@@ -90,14 +90,13 @@ struct LoginView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure full screen usage
-                .background(Color.white) // Optional: Set a background color to ensure visibility
-                .cornerRadius(10) // Optional: Add rounded corners for aesthetics
                 
                 Spacer()
             }
-            .padding() // Add padding around the whole VStack
+            .padding()
         }
         .navigationBarBackButtonHidden(true)
+        .background(Color.white)
     }
 }
 

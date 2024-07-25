@@ -49,6 +49,7 @@ struct QuizView: View {
                 VStack(alignment: .leading) {
                     Text("Quanto costa un pacchetto di sigarette?")
                         .font(.headline)
+                        .padding(.top, 10)
                     HStack {
                         TextField("", text: $packCost)
                             .padding()
@@ -57,7 +58,7 @@ struct QuizView: View {
                             .keyboardType(.decimalPad)
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(5.0)
-                            .padding(.leading, 10)
+                            .padding(.leading, 7)
                         
                         Text("€")
                     }
@@ -66,9 +67,11 @@ struct QuizView: View {
                 VStack(alignment: .leading) {
                     Text("Perché vuoi smettere di fumare?")
                         .font(.headline)
+                        .padding(.leading, 20)
+                        .padding(.top, 10)
                     TextEditor(text: $reasonToQuit)
                         .padding()
-                        .frame(height: 200)
+                        .frame(height: 225)
                         .multilineTextAlignment(.leading)
                         .padding(5)
                         .keyboardType(.default)
@@ -76,7 +79,7 @@ struct QuizView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
                         .padding(.top, 5)
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 30)
                 }
                 
                 Button(action: {
