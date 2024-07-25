@@ -33,7 +33,7 @@ struct WeeklyCigaretteChartView: View {
 }
 
 struct ProgressView: View {
-    
+
     @AppStorage("e_mail") private var e_mail : String = ""
     @AppStorage("installationDate") private var installationDateString: String?
     @AppStorage("cigarettesSmokedDiary") private var cigarettesSmokedDiary: Int = 0
@@ -73,9 +73,9 @@ struct ProgressView: View {
                             Text("Denaro risparmiato")
                                 .font(.caption)
                         }
-                        
+
                         Spacer()
-                        
+
                         VStack {
                             Image(systemName: "clock")
                                 .font(.largeTitle)
@@ -87,7 +87,7 @@ struct ProgressView: View {
                     }
                     .padding(.horizontal, 60)
                     .padding(.top, 20)
-                    
+
                     // Grafico a barre
                     VStack {
                         Text("Nell'ultima settimana...")
@@ -108,7 +108,7 @@ struct ProgressView: View {
                                 .background(Color.green)
                                 .cornerRadius(10)
                         }
-                        
+
                         NavigationLink(destination: WishListView()) {
                             Text("Wishlist")
                                 .foregroundColor(.black)
@@ -117,7 +117,7 @@ struct ProgressView: View {
                                 .background(Color.green)
                                 .cornerRadius(10)
                         }
-                        
+
                         NavigationLink(destination: HealthView()) {
                             Text("Salute")
                                 .foregroundColor(.black)
@@ -128,7 +128,7 @@ struct ProgressView: View {
                         }
                     }
                     .padding([.top, .horizontal], 20)
-                    
+
                     Spacer()
                 }
             }
@@ -158,7 +158,7 @@ struct ProgressView: View {
             fetchWeeklySmokingData()
         }
     }
-    
+
     private func fetchWeeklySmokingData() {
         diaryModel.fetchSmokingDiary { records in
             let calendar = Calendar.current
@@ -169,7 +169,7 @@ struct ProgressView: View {
             let lastSevenDays = (0..<7).map {
                 calendar.date(byAdding: .day, value: -$0, to: today)!
             }
-            
+
             let filteredRecords = records.filter { record in
                 lastSevenDays.contains { calendar.isDate(record.date, inSameDayAs: $0) }
             }
@@ -183,12 +183,11 @@ struct ProgressView: View {
             weeklySmokingData = data.reversed() // Reversing to show from earliest to latest
         }
     }
-    
+
     private func calculateMoneySaved() -> Double {
         guard let packCost = packCost, let cigarettesPerDay = cigarettesPerDay else {
             return 0.0
         }
-        
         let dailyCost = (Double(cigarettesPerDay) * packCost) / 20
         
         // Calculate total days since installation
@@ -208,7 +207,7 @@ struct ProgressView: View {
         
         return totalSaved - totalCostSmoked
     }
-    
+
     private func calculateDaysWithoutSmoking() -> Int {
         guard let lastSmokingDate = lastSmokingDate else {
             return 0
@@ -237,3 +236,4 @@ struct ProgressView_Previews: PreviewProvider {
         ProgressView()
     }
 }
+

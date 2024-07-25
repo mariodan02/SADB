@@ -35,7 +35,7 @@ class MainViewModel: ObservableObject {
     private func fetchQuizData() {
         quizViewModel.fetchQuizData { [weak self] packCost, cigarettesPerDay in
             guard let self = self, let packCost = packCost, let cigarettesPerDay = cigarettesPerDay else { return }
-            let moneySaved = self.calculateMoneySaved(packCost: packCost, cigarettesPerDay: cigarettesPerDay)
+            let moneySaved = self.calculateMoneySaved(packCost: packCost, cigarettesPerDay: Double(cigarettesPerDay))
             DispatchQueue.main.async {
                 self.moneySaved = moneySaved
             }
