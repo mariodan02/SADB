@@ -81,4 +81,44 @@ class DiaryViewModel: ObservableObject {
         }
     }
 
+    func deleteDiaryEntry(for date: Date, cigarettesSmoked: Int, completion: @escaping (Bool) -> Void) {
+            guard let user = Auth.auth().currentUser else {
+                print("User not authenticated")
+                completion(false)
+                return
+            }
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let dateString = dateFormatter.string(from: date)
+
+            ref.child("usernames").child(user.uid).child("diaryData").child(dateString).observeSingleEvent(of: .value) { snapshot in
+                if var existingValue = snapshot.value as? Int {
+                    existingValue -= cigarettesSmoked
+                    if existingValue <= 0 {
+                        self.ref.child("usernames").child(user.uid).child("diaryData").child(dateString).removeValue { error, _ in
+                            if let error = error {
+                                print("Error deleting diary entry: \(error.localizedDescription)")
+                                completion(false)
+                            } else {
+                                print("Diary entry successfully deleted")
+                                completion(true)
+                            }
+                        }
+                    } else {
+                        self.ref.child("usernames").child(user.uid).child("diaryData").child(dateString).setValue(existingValue) { error, _ in
+                            if let error = error {
+                                print("Error updating diary data after deletion: \(error.localizedDescription)")
+                                completion(false)
+                            } else {
+                                print("Diary data successfully updated after deletion")
+                                completion(true)
+                            }
+                        }
+                    }
+                } else {
+                    completion(false)
+                }
+            }
+        }
 }

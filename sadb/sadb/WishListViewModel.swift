@@ -39,17 +39,22 @@ class WishListViewModel: ObservableObject {
         }
     }
 
-    func pushNewValue(wishName: String, wishCost: Double) {
+    func pushNewValue(wishName: String, wishCost: Double, imageData: Data?) {
         guard let user = Auth.auth().currentUser else {
             print("User not authenticated")
             return
         }
 
-        let wishData = [
-            wishName: wishCost
+        var wishData: [String: Any] = [
+            "cost": wishCost
         ]
 
-        ref.child("usernames").child(user.uid).child("wishList").updateChildValues(wishData) { error, _ in
+        if let imageData = imageData {
+            let base64String = imageData.base64EncodedString()
+            wishData["image"] = base64String
+        }
+
+        ref.child("usernames").child(user.uid).child("wishList").child(wishName).setValue(wishData) { error, _ in
             if let error = error {
                 print("Error pushing wish data: \(error.localizedDescription)")
             } else {
@@ -70,18 +75,27 @@ class WishListViewModel: ObservableObject {
 
             for child in snapshot.children {
                 if let snapshot = child as? DataSnapshot,
-                   let wishCost = snapshot.value as? Double,
-                   let wishName = snapshot.key as? String {
-                    
+                   let wishData = snapshot.value as? [String: Any],
+                   let wishCost = wishData["cost"] as? Double {
+                    let wishName = snapshot.key
                     let equivalentPacks = self.packCost != nil ? Int(wishCost / self.packCost!) : 0
                     let equivalentText = "\(equivalentPacks) pacchetti di sigarette"
+                    
+                    var image: Image
+                    if let base64String = wishData["image"] as? String,
+                       let imageData = Data(base64Encoded: base64String),
+                       let uiImage = UIImage(data: imageData) {
+                        image = Image(uiImage: uiImage)
+                    } else {
+                        image = Image("gift")
+                    }
                     
                     let newItem = WishItem(
                         name: wishName,
                         cost: "\(wishCost)€",
                         equivalent: equivalentText,
                         isActive: true,
-                        image: Image("gift")
+                        image: image
                     )
 
                     loadedWishes.append(newItem)

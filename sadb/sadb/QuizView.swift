@@ -2,9 +2,10 @@ import SwiftUI
 import FirebaseCore
 
 struct QuizView: View {
-    @State private var cigarettesPerDay: Double = 0
-    @State private var packCost: Double = 0.0
+    @State private var cigarettesPerDay: String = ""
+    @State private var packCost: String = ""
     @State private var reasonToQuit: String = ""
+    @State private var alertMessage = ""
     
     @State private var showAlert: Bool = false
     @State private var quizCompleted: Bool = false
@@ -14,7 +15,7 @@ struct QuizView: View {
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2 // Imposta il numero minimo di cifre decimali
+        formatter.minimumFractionDigits = 2
         return formatter
     }()
     
@@ -33,54 +34,71 @@ struct QuizView: View {
                 
                 VStack(alignment: .leading) {
                     Text("Quante sigarette fumi in media al giorno?")
-                        .padding(5)
-                    TextField("", value: $cigarettesPerDay, formatter: NumberFormatter())
+                        .font(.headline)
+                        .padding(.top, 20)
+                    TextField("", text: $cigarettesPerDay)
                         .padding()
                         .frame(width: 70, height: 30)
-                        .overlay(RoundedRectangle(cornerRadius: 7)
-                            .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .padding(10)
+                        .padding(5)
                         .keyboardType(.decimalPad)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.leading, 10)
                 }
                 
                 VStack(alignment: .leading) {
                     Text("Quanto costa un pacchetto di sigarette?")
-                        .padding(5)
+                        .font(.headline)
                     HStack {
-                        TextField("", value: $packCost, formatter: numberFormatter)
+                        TextField("", text: $packCost)
                             .padding()
                             .frame(width: 70, height: 30)
-                            .overlay(RoundedRectangle(cornerRadius: 7)
-                                .stroke(Color.gray, lineWidth: 1)
-                            )
-                            .padding(.leading, 10)
+                            .padding(5)
                             .keyboardType(.decimalPad)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(5.0)
+                            .padding(.leading, 10)
+                        
                         Text("€")
                     }
                 }
                 
                 VStack(alignment: .leading) {
                     Text("Perché vuoi smettere di fumare?")
-                        .padding(5)
+                        .font(.headline)
                     TextEditor(text: $reasonToQuit)
-                            .frame(height: 200)
-                            .multilineTextAlignment(.leading)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1)
-                            )
-                            .padding(10)
+                        .padding()
+                        .frame(height: 200)
+                        .multilineTextAlignment(.leading)
+                        .padding(5)
+                        .keyboardType(.default)
+                        .scrollContentBackground(.hidden)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.top, 5)
+                        .padding(.horizontal, 10)
                 }
                 
                 Button(action: {
-                    if cigarettesPerDay > 0 && packCost > 0 && !reasonToQuit.isEmpty {
-                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDay, packCost: packCost, reasonToQuit: reasonToQuit)
-                            quizCompleted = true
-                            navigateToQuiz = false
-                        
-                    } else {
+                    let sanitizedPackCost = packCost.replacingOccurrences(of: ",", with: ".")
+                                        
+                    // Validate each input
+                    if cigarettesPerDay.isEmpty || Int(cigarettesPerDay) == nil {
+                        alertMessage = "Per favore, inserisci un numero valido per le sigarette fumate."
                         showAlert = true
+                    } else if sanitizedPackCost.isEmpty || Double(sanitizedPackCost) == nil {
+                        alertMessage = "Per favore, inserisci un numero valido per il costo del pacchetto."
+                        showAlert = true
+                    } else if reasonToQuit.isEmpty {
+                        alertMessage = "Per favore, compila tutti i campi."
+                        showAlert = true
+                    } else {
+                        // All inputs are valid, proceed with the quiz
+                        let cigarettesPerDayValue = Int(cigarettesPerDay) ?? 0
+                        let packCostValue = Double(sanitizedPackCost) ?? 0.0
+                        viewModel.pushNewValue(cigarettesPerDay: cigarettesPerDayValue, packCost: packCostValue, reasonToQuit: reasonToQuit)
+                        quizCompleted = true
+                        navigateToQuiz = false
                     }
                 }) {
                     Text("Continua")
@@ -91,20 +109,18 @@ struct QuizView: View {
                 }
                 .padding()
                 .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Errore"), message: Text("Per favore, compila tutti i campi."), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Errore"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
                 
                 NavigationLink(destination: ContentView(), isActive: $quizCompleted) {
                     EmptyView()
                 }
                 
-                
                 Spacer()
             }
             .padding()
         }
         .navigationBarBackButtonHidden() // Hide the back button
-        
     }
 }
 
@@ -113,3 +129,4 @@ struct QuizView_Previews: PreviewProvider {
         QuizView()
     }
 }
+

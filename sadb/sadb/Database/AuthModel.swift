@@ -9,32 +9,38 @@ class AuthModel: ObservableObject {
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
 
     func pushNewValue(username: String, email: String, password: String, completion: @escaping (Error?) -> Void) {
-        checkUsernameExists(username: username) { exists in
-            if exists {
-                print("Username already exists.")
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Username already exists"]))
-                return
-            }
-            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-                if let error = error {
-                    print("Error creating user: \(error.localizedDescription)")
-                    completion(error)
+            checkUsernameExists(username: username) { exists in
+                if exists {
+                    print("Username already exists.")
+                    completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Username già esistente"]))
                     return
                 }
-                guard let uid = authResult?.user.uid else {
-                    completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User UID not found"]))
-                    return
-                }
-                // Store the username in the database with the UID as the key
-                self.pushNewUsername(uid: uid, username: username) { error in
+                Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                     if let error = error {
-                        print("Error pushing new username: \(error.localizedDescription)")
+                        let nsError = error as NSError
+                        if nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+                            // Email già utilizzata
+                            completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "L'email inserita è già associata ad un altro account."]))
+                        } else {
+                            // Altri errori
+                            completion(error)
+                        }
+                        return
                     }
-                    completion(error)
+                    guard let uid = authResult?.user.uid else {
+                        completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User UID not found"]))
+                        return
+                    }
+                    // Store the username in the database with the UID as the key
+                    self.pushNewUsername(uid: uid, username: username) { error in
+                        if let error = error {
+                            print("Error pushing new username: \(error.localizedDescription)")
+                        }
+                        completion(error)
+                    }
                 }
             }
         }
-    }
 
     func login(email: String, password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
@@ -89,5 +95,3 @@ class AuthModel: ObservableObject {
         }
     }
 }
-    
-

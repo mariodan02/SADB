@@ -7,7 +7,7 @@ import FirebaseAuth
 class QuizViewModel: ObservableObject {
     private let ref = Database.database(url: "https://sadb-90c67-default-rtdb.europe-west1.firebasedatabase.app").reference()
 
-    func pushNewValue(cigarettesPerDay: Double, packCost: Double, reasonToQuit: String) {
+    func pushNewValue(cigarettesPerDay: Int, packCost: Double, reasonToQuit: String) {
         guard let user = Auth.auth().currentUser else {
             print("User not authenticated")
             return
@@ -16,7 +16,7 @@ class QuizViewModel: ObservableObject {
         // Recupera l'username basandosi sull'UID dell'user autenticato
         ref.child("usernames").child(user.uid).observeSingleEvent(of: .value) { snapshot in
             if let usernameDict = snapshot.value as? [String: Any],
-               let username = usernameDict["name"] as? String {
+               let _ = usernameDict["name"] as? String {
                 let quizData = [
                     "cigarettesPerDay": cigarettesPerDay,
                     "packCost": packCost,
@@ -39,7 +39,7 @@ class QuizViewModel: ObservableObject {
     }
 
     // Funzione per recuperare i dati del quiz
-    func fetchQuizData(completion: @escaping (Double?, Double?) -> Void) {
+    func fetchQuizData(completion: @escaping (Double?, Int?) -> Void) {
         guard let user = Auth.auth().currentUser else {
             print("User not authenticated")
             completion(nil, nil)
@@ -49,7 +49,7 @@ class QuizViewModel: ObservableObject {
         ref.child("usernames").child(user.uid).child("quizData").observeSingleEvent(of: .value) { snapshot in
             if let quizData = snapshot.value as? [String: Any],
                let packCost = quizData["packCost"] as? Double,
-               let cigarettesPerDay = quizData["cigarettesPerDay"] as? Double {
+               let cigarettesPerDay = quizData["cigarettesPerDay"] as? Int {
                 completion(packCost, cigarettesPerDay)
             } else {
                 completion(nil, nil)

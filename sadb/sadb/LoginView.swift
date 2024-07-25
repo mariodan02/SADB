@@ -14,10 +14,10 @@ struct LoginView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView{
+            VStack {
+                Spacer()
+                
                 VStack {
-                    Spacer()
-                    
                     Text("Accedi")
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -45,22 +45,27 @@ struct LoginView: View {
                     .padding(.horizontal, 40)
                     
                     Button(action: {
-                        authModel.login(email: email, password: password) { result in
-                            switch result {
-                            case .success(let authDataResult):
-                                // Handle successful login
-                                print("Login successful for user: \(authDataResult.user.email ?? "")")
-                                isLogged = true // Set isLogged to true
-                                e_mail = email
-                                loginSuccessful = true // Set loginSuccessful to true to navigate
-                            case .failure(let error):
-                                // Handle login error
-                                print("Login failed with error: \(error.localizedDescription)")
-                                alertMessage = error.localizedDescription
-                                showingAlert = true
+                        if email.isEmpty && password.isEmpty {
+                            alertMessage = "Per favore, inserisci sia l'email che la password."
+                            showingAlert = true
+                        } else {
+                            authModel.login(email: email, password: password) { result in
+                                switch result {
+                                case .success(let authDataResult):
+                                    // Handle successful login
+                                    print("Login successful for user: \(authDataResult.user.email ?? "")")
+                                    isLogged = true // Set isLogged to true
+                                    e_mail = email
+                                    loginSuccessful = true // Set loginSuccessful to true to navigate
+                                case .failure:
+                                    // Handle login error
+                                    print("Login failed.")
+                                    alertMessage = "L'email o la password potrebbero essere sbagliate. Per favore, riprova."
+                                    showingAlert = true
+                                }
                             }
                         }
-                    }){
+                    }) {
                         Text("Accedi")
                             .foregroundColor(.white)
                             .padding()
@@ -84,8 +89,13 @@ struct LoginView: View {
                         EmptyView()
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure full screen usage
+                .background(Color.white) // Optional: Set a background color to ensure visibility
+                .cornerRadius(10) // Optional: Add rounded corners for aesthetics
+                
                 Spacer()
             }
+            .padding() // Add padding around the whole VStack
         }
         .navigationBarBackButtonHidden(true)
     }

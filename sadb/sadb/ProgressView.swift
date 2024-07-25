@@ -42,7 +42,7 @@ struct ProgressView: View {
     @StateObject private var diaryModel = DiaryViewModel()
     @State private var username: String?
     @State private var packCost: Double?
-    @State private var cigarettesPerDay: Double?
+    @State private var cigarettesPerDay: Int?
     @State private var daysWithoutSmoking: Int = 0
     @State private var smokingDiary: [SmokingRecord] = []
     @State private var lastSmokingDate: Date?
@@ -136,14 +136,7 @@ struct ProgressView: View {
             .navigationTitle("Progressi")
         }
         .onAppear {
-            // Store the installation date if it doesn't exist
-            if installationDateString == nil {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd"
-                installationDateString = formatter.string(from: Date())
-            }
-
-            viewModel.fetchQuizData { (fetchedCigarettesPerDay, fetchedPackCost) in
+            viewModel.fetchQuizData { (fetchedPackCost, fetchedCigarettesPerDay) in
                 print("Fetched PackCost: \(String(describing: fetchedPackCost)), Fetched CigarettesPerDay: \(String(describing: fetchedCigarettesPerDay))")
                 self.packCost = fetchedPackCost
                 self.cigarettesPerDay = fetchedCigarettesPerDay
@@ -196,7 +189,7 @@ struct ProgressView: View {
             return 0.0
         }
         
-        let dailyCost = (cigarettesPerDay * packCost) / 20
+        let dailyCost = (Double(cigarettesPerDay) * packCost) / 20
         
         // Calculate total days since installation
         let formatter = DateFormatter()

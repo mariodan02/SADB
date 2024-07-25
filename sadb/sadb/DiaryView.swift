@@ -197,16 +197,32 @@ struct DiaryView: View {
         let dateKey = formattedDate(selectedDate)
         guard let entries = diaryEntries[dateKey] else { return }
         if let index = entries.firstIndex(of: entry) {
-            // Subtract the cigarette count from the total before deleting
-            if let oldEntryCigarettes = extractCigaretteCount(from: entries[index]) {
-                cigarettesSmokedDiary -= oldEntryCigarettes
-            }
+            // Extract the number of cigarettes from the entry
+            let cigarettesSmoked = extractCigaretteCount(from: entries[index]) ?? 0
+            
+            // Update local data
             diaryEntries[dateKey]?.remove(at: index)
+            if let _ = diaryEntries[dateKey], diaryEntries[dateKey]!.isEmpty {
+                diaryEntries.removeValue(forKey: dateKey)
+            }
+            
+            // Update the total cigarettes count
+            cigarettesSmokedDiary -= cigarettesSmoked
+            
+            // Save the updated entries to local storage
             saveDiaryEntries()
-            // Aggiorniamo il database con i nuovi valori
-            diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: 0)
+            
+            // Remove the entry from the database
+            diaryModel.deleteDiaryEntry(for: selectedDate, cigarettesSmoked: cigarettesSmoked) { success in
+                if success {
+                    print("Entry successfully deleted from database")
+                } else {
+                    print("Failed to delete entry from database")
+                }
+            }
         }
     }
+
     
     func extractCigaretteCount(from entry: String) -> Int? {
         let pattern = "Quante sigarette: (\\d+)"
@@ -218,11 +234,11 @@ struct DiaryView: View {
     }
 }
 
-
 struct DiaryEntryView: View {
     @State var entry: String
     @State private var smokedToday: Bool = false
-    @State private var cigarettesSmoked: Int = 0
+    @State private var cigarettesSmoked: String = "0"
+    @State private var showAlert: Bool = false
     
     var saveAction: (String, Bool, String, Date) -> Void
     @StateObject private var diaryModel = DiaryViewModel()
@@ -241,22 +257,50 @@ struct DiaryEntryView: View {
             .padding()
             
             if smokedToday {
-                TextField("Quante sigarette hai fumato oggi?", value: $cigarettesSmoked, formatter: NumberFormatter())
-                    .padding()
-                    .border(Color.gray, width: 1)
-                    .keyboardType(.numberPad)
+                VStack(alignment: .leading) {
+                    Text("Quante sigarette hai fumato oggi?")
+                        .padding(.bottom, 2)
+                    
+                    TextField("", text: $cigarettesSmoked)
+                        .padding()
+                        .border(Color.gray, width: 1)
+                        .keyboardType(.numberPad)
+                        .onTapGesture {
+                            // Svuota il campo se contiene ancora lo 0
+                            if cigarettesSmoked == "0" {
+                                cigarettesSmoked = ""
+                            }
+                        }
+                        .onChange(of: cigarettesSmoked) { newValue in
+                            if !newValue.isEmpty && Int(newValue) == nil {
+                                showAlert = true
+                                cigarettesSmoked = newValue.filter { $0.isNumber }
+                            }
+                        }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 20)
             }
             
-            TextEditor(text: $entry)
-                .padding()
-                .border(Color.gray, width: 2)
-                .frame(height: 200)
+            VStack(alignment: .leading) {
+                            Text("Inserisci qui la tua annotazione...")
+                                .padding(.bottom, 2)
+                TextEditor(text: $entry)
+                    .padding(.horizontal)
+                    .border(Color.gray, width: 2)
+                    .frame(height: 200)
+                            
+                        }
+                        .padding(.horizontal)
+            
             Button(action: {
                 // Pass the selected date along with other values
-                saveAction(entry, smokedToday, String(cigarettesSmoked), selectedDate)
-                diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: cigarettesSmoked)
+                saveAction(entry, smokedToday, cigarettesSmoked, selectedDate)
+                if let numCigarettes = Int(cigarettesSmoked) {
+                    diaryModel.pushNewValue(currentDate: selectedDate, cigSmokedToday: numCigarettes)
+                }
             }) {
-                    Text("Salva")
+                Text("Salva")
                     .foregroundColor(.white)
                     .padding()
                     .background(Color.green)
@@ -266,9 +310,16 @@ struct DiaryEntryView: View {
             Spacer()
             
         }
+        .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Errore"),
+                        message: Text("Per favore, inserisci solo numeri nel campo delle sigarette fumate."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+        
     }
 }
-
 
 struct CalendarView: View {
     @Binding var selectedDate: Date
