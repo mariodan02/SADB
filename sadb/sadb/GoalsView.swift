@@ -84,3 +84,4 @@ struct GoalItem: View {
         .shadow(radius: 5)
     }
 }
+
