@@ -37,6 +37,7 @@ struct ProgressView: View {
     @AppStorage("e_mail") private var e_mail : String = ""
     @AppStorage("installationDate") private var installationDateString: String?
     @AppStorage("cigarettesSmokedDiary") private var cigarettesSmokedDiary: Int = 0
+    @AppStorage("isLogged") private var isLogged = true
     @StateObject private var authModel = AuthModel()
     @StateObject private var viewModel = QuizViewModel()
     @StateObject private var diaryModel = DiaryViewModel()
@@ -47,6 +48,8 @@ struct ProgressView: View {
     @State private var smokingDiary: [SmokingRecord] = []
     @State private var lastSmokingDate: Date?
     @State private var weeklySmokingData: [CigaretteData] = []
+    @State private var navigateToLog: Bool = false
+    @State private var showAlert: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -73,9 +76,9 @@ struct ProgressView: View {
                             Text("Denaro risparmiato")
                                 .font(.caption)
                         }
-
+                        
                         Spacer()
-
+                        
                         VStack {
                             Image(systemName: "clock")
                                 .font(.largeTitle)
@@ -87,7 +90,7 @@ struct ProgressView: View {
                     }
                     .padding(.horizontal, 60)
                     .padding(.top, 20)
-
+                    
                     // Grafico a barre
                     VStack {
                         Text("Nell'ultima settimana...")
@@ -97,7 +100,7 @@ struct ProgressView: View {
                             .frame(height: 300)
                     }
                     .padding([.top, .horizontal], 20)
-
+                    
                     // Bottoni
                     VStack(spacing: 15) {
                         NavigationLink(destination: GoalsView(moneySaved: calculateMoneySaved(), daysWithoutSmoking: daysWithoutSmoking)){
@@ -108,7 +111,7 @@ struct ProgressView: View {
                                 .background(Color.green)
                                 .cornerRadius(10)
                         }
-
+                        
                         NavigationLink(destination: WishListView()) {
                             Text("Wishlist")
                                 .foregroundColor(.black)
@@ -117,7 +120,7 @@ struct ProgressView: View {
                                 .background(Color.green)
                                 .cornerRadius(10)
                         }
-
+                        
                         NavigationLink(destination: HealthView()) {
                             Text("Salute")
                                 .foregroundColor(.black)
@@ -128,12 +131,28 @@ struct ProgressView: View {
                         }
                     }
                     .padding([.top, .horizontal], 20)
-
+                    
                     Spacer()
                 }
             }
             .background(Color.green.opacity(0.1))
             .navigationTitle("Progressi")
+            .navigationBarItems(trailing: Button(action: {
+                showAlert = true
+            }){
+                Image(systemName: "rectangle.portrait.and.arrow.right")
+                    .foregroundColor(.green)
+            })
+            .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Conferma logout"),
+                        message: Text("Sei sicuro di voler fare il logout?"),
+                        primaryButton: .destructive(Text("Logout")) {
+                            isLogged = false
+                        },
+                        secondaryButton: .cancel(Text("Indietro"))
+                    )
+                }
         }
         .onAppear {
             viewModel.fetchQuizData { (fetchedPackCost, fetchedCigarettesPerDay) in

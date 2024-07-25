@@ -20,7 +20,6 @@ struct GoalsView: View {
             ("7.circle", "Non ho fumato per 1 settimana", daysWithoutSmoking>=7),
             ("14.circle", "Non ho fumato per 2 settimane", daysWithoutSmoking>=14),
             ("21.circle", "Non ho fumato per 3 settimane", daysWithoutSmoking>=21),
-            ("28.circle", "Non ho fumato per 4 settimane", daysWithoutSmoking>=28),
             ("1.circle.fill", "Non ho fumato per 1 mese", daysWithoutSmoking>=31),
             ("2.circle.fill", "Non ho fumato per 2 mesi", daysWithoutSmoking >= 60),
             ("3.circle.fill", "Non ho fumato per 3 mesi", daysWithoutSmoking >= 90),
